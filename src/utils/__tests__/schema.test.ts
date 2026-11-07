@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { schemaOrg, softwareServiceSchema } from '../schema';
+import { GITHUB_URL, PORTAFOLIO_URL } from '../links';
 
 describe('schemaOrg', () => {
   it('has the schema.org @context', () => {
@@ -62,9 +63,11 @@ describe('schemaOrg', () => {
     );
   });
 
-  it('has a Person founder', () => {
+  it('has a Person founder with public profiles', () => {
     expect(schemaOrg.founder['@type']).toBe('Person');
     expect(schemaOrg.founder.name).toBe('Santiago Molano');
+    expect(schemaOrg.founder.sameAs).toContain(PORTAFOLIO_URL);
+    expect(schemaOrg.founder.sameAs).toContain(GITHUB_URL);
   });
 });
 
