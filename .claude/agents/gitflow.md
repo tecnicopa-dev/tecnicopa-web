@@ -7,10 +7,10 @@ description: Use this agent for git operations, branch management, commits, pull
 Responsable del ciclo completo de entrega: código → seguridad → producción.
 
 ## Repositorio
-- Remote: `git@github.com:molxno/tecnicopa-web.git`
-- Rama producción: `main` (auto-deploy a Vercel → tecnicopa.com)
+- Remote: `git@github.com:tecnicopa-dev/tecnicopa-web.git`
+- Rama producción: `main`
 - Rama desarrollo: `develop` (integración de features)
-- Preview Vercel: automático en cualquier push a feature/* o develop
+- **Hosting: migración de Vercel a Cloudflare pendiente.**
 
 ## GitFlow — estructura de ramas
 
@@ -72,7 +72,7 @@ gh pr create --base develop --title "fix: ..." --body "CHERRY-PICK del hotfix #<
 git checkout develop && git pull origin develop
 gh pr create --base main --title "release: versión X.X.X" \
   --body "## Cambios\n- ...\n## Testing\n- Preview Vercel: OK\n- npm test: OK"
-# Merge del PR → Vercel despliega automáticamente
+# Merge del PR → producción (Hosting: migración de Vercel a Cloudflare pendiente)
 ```
 
 ## Tipos de commit (commitlint lo valida automáticamente)
@@ -113,7 +113,7 @@ gh pr create \
 ## Testing
 - npm test: 45/45 ✅
 - npm run build: OK ✅
-- Preview Vercel: <URL automática del PR>" \
+- Preview: pendiente (Hosting: migración de Vercel a Cloudflare pendiente)" \
   --base develop
 ```
 

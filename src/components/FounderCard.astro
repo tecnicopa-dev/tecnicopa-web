@@ -1,4 +1,6 @@
 ---
+import { Picture } from 'astro:assets';
+import founderPhoto from '../assets/founder/santiago-molano.jpg';
 import { founder } from '../utils/content';
 import { GITHUB_URL, PORTAFOLIO_URL } from '../utils/links';
 
@@ -7,16 +9,32 @@ interface Props {
 }
 
 const { title } = Astro.props;
+const photoSize = 96;
 ---
 
 <div class="max-w-xl reveal">
   <h2 class="text-3xl md:text-4xl font-bold mb-8">{title}</h2>
   <div class="flex flex-col sm:flex-row gap-6 items-start">
-    <div
-      class="w-16 h-16 rounded-full bg-tecni-purple flex items-center justify-center shrink-0"
-      aria-hidden="true"
-    >
-      <span class="text-white font-bold text-2xl">{founder.name.charAt(0)}</span>
+    <div class="relative h-24 w-24 shrink-0">
+      <div
+        class="absolute inset-0 rounded-full bg-tecni-purple flex items-center justify-center"
+        aria-hidden="true"
+      >
+        <span class="text-white font-bold text-2xl">{founder.name.charAt(0)}</span>
+      </div>
+      <Picture
+        src={founderPhoto}
+        formats={['avif', 'webp']}
+        widths={[photoSize, photoSize * 2]}
+        sizes={`${photoSize}px`}
+        alt={founder.photoAlt}
+        width={photoSize}
+        height={photoSize}
+        loading="lazy"
+        decoding="async"
+        class="relative z-10 h-24 w-24 rounded-full object-cover"
+        onerror="this.style.visibility='hidden'"
+      />
     </div>
     <div class="flex flex-col gap-3">
       <p class="font-bold text-lg">

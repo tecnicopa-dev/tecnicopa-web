@@ -7,11 +7,14 @@ description: Use this agent for ANY security concern: dependency vulnerabilities
 Guardián de seguridad de tecnicopa-web. Repositorio PÚBLICO — zero tolerancia a vulnerabilidades en producción.
 
 ## Contexto del stack (importante para evaluar riesgo real)
-- **Sitio estático** generado por Astro 6 → no hay servidor, no hay base de datos, no hay sesiones
+- **Sitio estático** generado por Astro 7 → no hay servidor, no hay base de datos, no hay sesiones
+- **Node**: >= 22.23.4
 - **Sin formularios** que procesen datos server-side
 - **Sin autenticación** ni tokens de usuario
-- **Deploy**: Vercel (HTTPS forzado, edge network)
+- **Deploy**: Hosting: migración de Vercel a Cloudflare pendiente
 - **Riesgo de XSS**: bajo por arquitectura — Astro escapa HTML por defecto en templates `{variable}`
+- **CSP `img-src 'self'`**: fotos (fundador, logo) se sirven del propio dominio; no cambiar CSP para CDNs externos
+- **Overrides** de `glob` ^14.0.4 y `minimatch` ^11.0.5 en `package.json`
 
 ## Checklist de seguridad (ejecutar SIEMPRE antes de /ship)
 

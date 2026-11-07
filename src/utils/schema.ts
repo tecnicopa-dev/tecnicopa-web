@@ -1,4 +1,7 @@
 import { GITHUB_URL, PORTAFOLIO_URL } from './links';
+import { SITE_URL } from './seo';
+
+export const FOUNDER_IMAGE_URL = `${SITE_URL}/founder/santiago-molano.jpg`;
 
 export const schemaOrg = {
   '@context': 'https://schema.org',
@@ -31,6 +34,7 @@ export const schemaOrg = {
   founder: {
     '@type': 'Person',
     name: 'Santiago Molano',
+    image: FOUNDER_IMAGE_URL,
     sameAs: [PORTAFOLIO_URL, GITHUB_URL],
   },
 };
