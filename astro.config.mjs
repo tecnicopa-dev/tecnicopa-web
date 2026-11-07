@@ -8,6 +8,8 @@ import vercel from '@astrojs/vercel';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://tecnicopa.com',
+  // Conserva el comportamiento de Astro 6: un espacio entre elementos inline.
+  compressHTML: true,
   integrations: [sitemap()],
 
   vite: {
