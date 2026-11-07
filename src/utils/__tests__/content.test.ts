@@ -59,6 +59,7 @@ describe('founder', () => {
     expect(founder.role).toBe('Fundador');
     expect(founder.bio).toMatch(/4 años/);
     expect(founder.honestLine).toMatch(/técnico aliado/);
+    expect(founder.photoAlt).toBe('Santiago Molano, fundador de TecniCopa');
   });
 });
 

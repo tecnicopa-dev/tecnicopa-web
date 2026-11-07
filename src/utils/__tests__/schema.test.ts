@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { schemaOrg, softwareServiceSchema } from '../schema';
+import { FOUNDER_IMAGE_URL, schemaOrg, softwareServiceSchema } from '../schema';
 import { GITHUB_URL, PORTAFOLIO_URL } from '../links';
 
 describe('schemaOrg', () => {
@@ -68,6 +68,12 @@ describe('schemaOrg', () => {
     expect(schemaOrg.founder.name).toBe('Santiago Molano');
     expect(schemaOrg.founder.sameAs).toContain(PORTAFOLIO_URL);
     expect(schemaOrg.founder.sameAs).toContain(GITHUB_URL);
+  });
+
+  it('has an absolute same-origin founder image', () => {
+    expect(schemaOrg.founder.image).toBe(FOUNDER_IMAGE_URL);
+    expect(FOUNDER_IMAGE_URL).toBe('https://tecnicopa.com/founder/santiago-molano.jpg');
+    expect(schemaOrg.founder.image.startsWith(schemaOrg.url)).toBe(true);
   });
 });
 

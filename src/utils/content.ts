@@ -57,6 +57,7 @@ export interface FounderContent {
   role: string;
   bio: string;
   honestLine: string;
+  photoAlt: string;
   portfolioLabel: string;
   githubLabel: string;
 }
@@ -84,6 +85,7 @@ export const founder: FounderContent = {
   bio: 'Más de 4 años desarrollando software en banca, fintech y salud digital.',
   honestLine:
     'El soporte técnico lo realiza un técnico aliado; TecniCopa coordina, garantiza y hace el seguimiento.',
+  photoAlt: 'Santiago Molano, fundador de TecniCopa',
   portfolioLabel: 'Portafolio',
   githubLabel: 'GitHub',
 };
