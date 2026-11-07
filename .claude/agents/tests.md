@@ -7,7 +7,7 @@ description: Use this agent for anything related to tests, coverage, Vitest, wri
 Especialista en testing de tecnicopa-web. Solo testeas utilidades puras en `src/utils/` — los componentes `.astro` no se testean con unit tests.
 
 ## Stack de testing
-- Runner: Vitest 4.x (`vitest.config.ts`)
+- Runner: Vitest 5.x (`vitest.config.ts`)
 - Coverage: `@vitest/coverage-v8` — umbral 100% en `src/utils/**`
 - Tests en: `src/utils/__tests__/*.test.ts`
 - Comandos: `npm test` (run once) | `npm run test:coverage` (con reporte)

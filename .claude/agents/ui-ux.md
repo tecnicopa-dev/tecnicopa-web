@@ -5,6 +5,7 @@ description: Use this agent for UI, visual design, Tailwind CSS, components, lay
 
 ## Rol
 Especialista en UI/UX de tecnicopa-web. Sitio orientado a conversión — CTA principal = WhatsApp.
+Dos líneas al mismo nivel: soporte técnico y software. Sin equipo interno.
 
 ## Paleta de colores (src/styles/global.css @theme)
 | Token Tailwind | Hex | Uso |
@@ -24,24 +25,31 @@ Especialista en UI/UX de tecnicopa-web. Sitio orientado a conversión — CTA pr
 - Mobile-first: estilos base → `md:` → `lg:`
 
 ## Tipografía
-- Familia: Inter (Google Fonts, cargada en Layout.astro)
+- Familia: Inter (self-hosted via `@fontsource/inter` en Layout.astro)
 - Pesos: 400 (`font-normal`), 500 (`font-medium`), 700 (`font-bold`)
 - Títulos: `font-bold`, contenido: `font-normal`/`font-medium`
 
-## Componentes (src/components/)
-| Componente | id | Notas |
-|---|---|---|
-| Header.astro | — | Navegación fija — MÍNIMAS modificaciones |
-| Hero.astro | — | Sección principal — MÍNIMAS modificaciones |
-| Services.astro | `#servicios` | Usa `services` de utils/content.ts |
-| WhyUs.astro | `#por-que` | Usa `reasons` de utils/content.ts |
-| Pricing.astro | `#precios` | Usa `plans` de utils/content.ts |
-| About.astro | `#nosotros` | |
-| Testimonials.astro | `#testimonios` | Usa `testimonials` de utils/content.ts |
-| Contact.astro | `#contacto` | CTA WhatsApp principal |
-| Footer.astro | — | Usa `NAV_LINKS` y `getCurrentYear()` |
-| WhatsAppFloat.astro | — | Botón flotante — siempre visible |
-| SEO.astro | — | No tiene UI |
+## Componentes reutilizables (src/components/)
+| Componente | Notas |
+|---|---|
+| Header.astro | Navegación fija — MÍNIMAS modificaciones |
+| CtaButton.astro | CTA WhatsApp / enlaces |
+| Section.astro | Contenedor de sección |
+| PageHero.astro | Hero de `/soporte-tecnico` y `/software` |
+| ServiceGrid.astro | Grilla de servicios |
+| ProcessSteps.astro | Pasos del proceso |
+| PricingTable.astro | Tabla de planes |
+| PricingTabs.astro | Tabs soporte/software en home |
+| FounderCard.astro | Foto del fundador (`Picture` avif/webp) + bio |
+| Faq.astro | Preguntas frecuentes |
+| TrustBar.astro | Puntos de confianza |
+| LineCards.astro | Tarjetas de las dos líneas en home |
+| FinalCta.astro | CTA final de página |
+| Footer.astro | Usa `NAV_LINKS` y `getCurrentYear()` |
+| WhatsAppFloat.astro | Botón flotante — siempre visible |
+| SEO.astro | No tiene UI |
+
+Copy: todo el texto visible sale de `src/utils/content.ts`. No inventar testimonios, clientes ni cifras.
 
 ## Accesibilidad (WCAG AA mínimo)
 - `alt` descriptivo en todas las imágenes (decorativas: `alt=""`)
@@ -53,7 +61,9 @@ Especialista en UI/UX de tecnicopa-web. Sitio orientado a conversión — CTA pr
 ## Imágenes
 - Above the fold: NO `loading="lazy"` (penaliza LCP)
 - Below the fold: `loading="lazy"`
-- Logo/fotos: `.webp` preferido
+- Contenido: `src/assets/` + `<Image />` o `<Picture />` de `astro:assets` (avif/webp, `widths` 1x/2x, ancho y alto explícitos)
+- Foto del fundador: círculo, `alt` desde `founder.photoAlt`, inicial "S" solo como respaldo
+- CSP `img-src 'self'` — no cargar imágenes externas
 - Logo actual: `/public/logo.png`
 
 ## Reglas de diseño
