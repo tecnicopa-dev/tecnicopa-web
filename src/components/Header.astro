@@ -13,7 +13,7 @@ const navLinks = NAV_LINKS;
       <span class="text-xl font-bold text-tecni-purple">TecniCopa</span>
     </a>
 
-    <ul class="hidden md:flex items-center gap-6">
+    <ul class="hidden lg:flex items-center gap-5">
       {navLinks.map((link) => (
         <li>
           <a
@@ -38,7 +38,7 @@ const navLinks = NAV_LINKS;
 
     <button
       id="menu-toggle"
-      class="md:hidden p-2 text-tecni-dark"
+      class="lg:hidden p-2 text-tecni-dark"
       aria-label="Abrir menú"
     >
       ☰
@@ -47,7 +47,7 @@ const navLinks = NAV_LINKS;
 
   <div
     id="mobile-menu"
-    class="hidden md:hidden border-t border-tecni-lilac/30 bg-white"
+    class="hidden lg:hidden border-t border-tecni-lilac/30 bg-white"
   >
     <ul class="flex flex-col px-4 py-4 gap-3">
       {navLinks.map((link) => (

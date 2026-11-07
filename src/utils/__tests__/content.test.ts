@@ -1,25 +1,30 @@
 import { describe, it, expect } from 'vitest';
-import { NAV_LINKS, services, plans, reasons, testimonials } from '../content';
+import { NAV_LINKS, services, plans, reasons, about, softwarePage } from '../content';
 
 describe('NAV_LINKS', () => {
-  it('has 5 navigation links', () => {
-    expect(NAV_LINKS).toHaveLength(5);
+  it('has 6 navigation links', () => {
+    expect(NAV_LINKS).toHaveLength(6);
   });
 
-  it('every link has a hash href and a non-empty label', () => {
+  it('every link has a non-empty href and label', () => {
     for (const link of NAV_LINKS) {
-      expect(link.href).toMatch(/^#/);
+      expect(link.href.length).toBeGreaterThan(0);
       expect(link.label.length).toBeGreaterThan(0);
     }
   });
 
-  it('includes all required section anchors', () => {
+  it('home section anchors work from any page', () => {
     const hrefs = NAV_LINKS.map((l) => l.href);
-    expect(hrefs).toContain('#servicios');
-    expect(hrefs).toContain('#por-que');
-    expect(hrefs).toContain('#precios');
-    expect(hrefs).toContain('#nosotros');
-    expect(hrefs).toContain('#contacto');
+    expect(hrefs).toContain('/#servicios');
+    expect(hrefs).toContain('/#por-que');
+    expect(hrefs).toContain('/#precios');
+    expect(hrefs).toContain('/#nosotros');
+    expect(hrefs).toContain('/#contacto');
+  });
+
+  it('includes the software page', () => {
+    expect(NAV_LINKS.map((l) => l.href)).toContain('/software');
+    expect(NAV_LINKS.map((l) => l.label)).toContain('Software');
   });
 });
 
@@ -83,23 +88,108 @@ describe('reasons', () => {
   });
 });
 
-describe('testimonials', () => {
-  it('has 3 testimonials', () => {
-    expect(testimonials).toHaveLength(3);
+describe('about', () => {
+  it('presents Santiago Molano as founder', () => {
+    expect(about.founder.name).toBe('Santiago Molano');
+    expect(about.founder.role).toBe('Fundador');
+    expect(about.founder.description.length).toBeGreaterThan(0);
   });
 
-  it('every testimonial has name, location, text and service', () => {
-    for (const t of testimonials) {
-      expect(t.name.length).toBeGreaterThan(0);
-      expect(t.location.length).toBeGreaterThan(0);
-      expect(t.text.length).toBeGreaterThan(0);
-      expect(t.service.length).toBeGreaterThan(0);
+  it('does not claim an internal team of several people', () => {
+    const blob = [
+      about.title,
+      ...about.paragraphs,
+      ...about.highlights.map((h) => `${h.title} ${h.subtitle}`),
+      about.founderTitle,
+      about.founder.name,
+      about.founder.role,
+      about.founder.description,
+    ].join(' ');
+
+    expect(blob).not.toMatch(/equipo de 3/i);
+    expect(blob).not.toMatch(/Maribel/i);
+    expect(blob).not.toMatch(/Victor/i);
+    expect(about.founderTitle).not.toMatch(/equipo/i);
+  });
+
+  it('explains the allied technician model', () => {
+    const blob = about.paragraphs.join(' ');
+    expect(blob).toMatch(/técnico aliado/i);
+    expect(blob).toMatch(/garantía escrita/i);
+    expect(blob).toMatch(/7 días/);
+  });
+
+  it('has location and partner highlights', () => {
+    expect(about.highlights).toHaveLength(2);
+    const icons = about.highlights.map((h) => h.icon);
+    expect(icons).toContain('location');
+    expect(icons).toContain('partner');
+    for (const highlight of about.highlights) {
+      expect(highlight.title.length).toBeGreaterThan(0);
+      expect(highlight.subtitle.length).toBeGreaterThan(0);
     }
   });
 
-  it('includes testimonials from Copacabana and Girardota', () => {
-    const locations = testimonials.map((t) => t.location);
-    expect(locations).toContain('Copacabana');
-    expect(locations).toContain('Girardota');
+  it('has a badge, title and at least two paragraphs', () => {
+    expect(about.badge.length).toBeGreaterThan(0);
+    expect(about.title.length).toBeGreaterThan(0);
+    expect(about.paragraphs.length).toBeGreaterThanOrEqual(2);
+  });
+});
+
+describe('softwarePage', () => {
+  it('has SEO title and description within limits', () => {
+    expect(softwarePage.seo.title.length).toBeGreaterThan(0);
+    expect(softwarePage.seo.title.length).toBeLessThanOrEqual(60);
+    expect(softwarePage.seo.description.length).toBeGreaterThan(0);
+    expect(softwarePage.seo.description.length).toBeLessThanOrEqual(155);
+  });
+
+  it('SEO copy covers custom software and process automation in Colombia', () => {
+    const blob = `${softwarePage.seo.title} ${softwarePage.seo.description}`.toLowerCase();
+    expect(blob).toMatch(/software/);
+    expect(blob).toMatch(/automatizaci/);
+    expect(blob).toMatch(/colombia/);
+  });
+
+  it('hero has title, subtitle and CTAs', () => {
+    expect(softwarePage.hero.title.length).toBeGreaterThan(0);
+    expect(softwarePage.hero.subtitle.length).toBeGreaterThan(0);
+    expect(softwarePage.hero.primaryCta.length).toBeGreaterThan(0);
+    expect(softwarePage.hero.secondaryCta.length).toBeGreaterThan(0);
+    expect(softwarePage.hero.secondaryHref).toBe('#como-trabajamos');
+  });
+
+  it('has 4 software services with titles and descriptions', () => {
+    expect(softwarePage.services).toHaveLength(4);
+    for (const service of softwarePage.services) {
+      expect(service.title.length).toBeGreaterThan(0);
+      expect(service.description.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('has 4 process steps numbered 1 to 4', () => {
+    expect(softwarePage.process).toHaveLength(4);
+    expect(softwarePage.process.map((s) => s.step)).toEqual([1, 2, 3, 4]);
+    for (const step of softwarePage.process) {
+      expect(step.title.length).toBeGreaterThan(0);
+      expect(step.description.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('software reasons do not repeat technical support benefits', () => {
+    const blob = softwarePage.reasons.map((r) => `${r.title} ${r.description}`).join(' ');
+    expect(blob).not.toMatch(/garantía escrita/i);
+    expect(blob).not.toMatch(/comprobante de pago/i);
+    expect(blob).not.toMatch(/7 días/);
+    expect(softwarePage.reasons).toHaveLength(4);
+  });
+
+  it('has a final CTA and a home banner', () => {
+    expect(softwarePage.cta.title.length).toBeGreaterThan(0);
+    expect(softwarePage.cta.description.length).toBeGreaterThan(0);
+    expect(softwarePage.cta.button.length).toBeGreaterThan(0);
+    expect(softwarePage.homeBanner.text.length).toBeGreaterThan(0);
+    expect(softwarePage.homeBanner.button.length).toBeGreaterThan(0);
   });
 });
