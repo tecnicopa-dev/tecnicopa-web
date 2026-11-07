@@ -1,0 +1,49 @@
+---
+import { founder } from '../utils/content';
+import { GITHUB_URL, PORTAFOLIO_URL } from '../utils/links';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="max-w-xl reveal">
+  <h2 class="text-3xl md:text-4xl font-bold mb-8">{title}</h2>
+  <div class="flex flex-col sm:flex-row gap-6 items-start">
+    <div
+      class="w-16 h-16 rounded-full bg-tecni-purple flex items-center justify-center shrink-0"
+      aria-hidden="true"
+    >
+      <span class="text-white font-bold text-2xl">{founder.name.charAt(0)}</span>
+    </div>
+    <div class="flex flex-col gap-3">
+      <p class="font-bold text-lg">
+        {founder.name}
+        <span class="text-tecni-dark/40 font-medium"> — </span>
+        <span class="text-tecni-purple font-medium">{founder.role}</span>
+      </p>
+      <p class="text-tecni-dark/70">{founder.bio}</p>
+      <p class="text-sm text-tecni-dark/60">{founder.honestLine}</p>
+      <p class="flex flex-wrap gap-4 text-sm">
+        <a
+          href={PORTAFOLIO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-tecni-purple font-medium underline-offset-4 hover:underline"
+        >
+          {founder.portfolioLabel}
+        </a>
+        <a
+          href={GITHUB_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-tecni-purple font-medium underline-offset-4 hover:underline"
+        >
+          {founder.githubLabel}
+        </a>
+      </p>
+    </div>
+  </div>
+</div>

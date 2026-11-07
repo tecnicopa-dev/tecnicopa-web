@@ -1,0 +1,19 @@
+---
+interface Props {
+  id?: string;
+  tone?: 'white' | 'lavender' | 'dark';
+}
+
+const { id, tone = 'white' } = Astro.props;
+const tones = {
+  white: 'bg-white text-tecni-dark',
+  lavender: 'bg-tecni-lavender text-tecni-dark',
+  dark: 'bg-tecni-dark text-white',
+};
+---
+
+<section id={id} class={`py-20 md:py-24 ${tones[tone]}`}>
+  <div class="max-w-6xl mx-auto px-4">
+    <slot />
+  </div>
+</section>

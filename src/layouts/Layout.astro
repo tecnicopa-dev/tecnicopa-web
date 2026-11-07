@@ -9,7 +9,7 @@ import '@fontsource/inter/latin-700.css';
 import interLatin400 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
 import interLatin700 from '@fontsource/inter/files/inter-latin-700-normal.woff2?url';
 import SEO from '../components/SEO.astro';
-import { schemaOrg } from '../utils/schema';
+import { schemaOrg, softwareServiceSchema } from '../utils/schema';
 import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
 
@@ -49,8 +49,13 @@ const {
     <link rel="preload" href={interLatin400} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={interLatin700} as="font" type="font/woff2" crossorigin />
 
-    <!-- Schema.org LocalBusiness JSON-LD -->
+    <!-- Schema.org LocalBusiness y Service JSON-LD -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(softwareServiceSchema)}
+    />
   </head>
   <body class="bg-white text-tecni-dark font-sans">
     <slot />

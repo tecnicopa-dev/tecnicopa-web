@@ -1,0 +1,34 @@
+---
+import type { ProcessStep } from '../utils/content';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  steps: ProcessStep[];
+}
+
+const { title, subtitle, steps } = Astro.props;
+---
+
+<div>
+  <div class="max-w-2xl mb-12 reveal">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
+    {subtitle && <p class="text-tecni-dark/60">{subtitle}</p>}
+  </div>
+  <ol class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal-cascade">
+    {
+      steps.map((item) => (
+        <li class="reveal flex flex-col gap-3">
+          <span
+            class="w-10 h-10 rounded-full bg-tecni-purple text-white font-bold flex items-center justify-center"
+            aria-hidden="true"
+          >
+            {item.step}
+          </span>
+          <h3 class="font-bold text-lg">{item.title}</h3>
+          <p class="text-sm text-tecni-dark/60 leading-relaxed">{item.description}</p>
+        </li>
+      ))
+    }
+  </ol>
+</div>

@@ -1,0 +1,27 @@
+---
+import type { FaqItem } from '../utils/content';
+
+interface Props {
+  title: string;
+  items: FaqItem[];
+}
+
+const { title, items } = Astro.props;
+---
+
+<div>
+  <h2 class="text-3xl md:text-4xl font-bold mb-8 reveal">{title}</h2>
+  <div class="flex flex-col gap-3 max-w-3xl">
+    {
+      items.map((item) => (
+        <details class="reveal group border border-tecni-lilac/40 rounded-2xl px-5 py-4">
+          <summary class="cursor-pointer font-medium list-none flex items-center justify-between gap-4">
+            {item.question}
+            <span class="text-tecni-purple" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-3 text-sm text-tecni-dark/60 leading-relaxed">{item.answer}</p>
+        </details>
+      ))
+    }
+  </div>
+</div>
