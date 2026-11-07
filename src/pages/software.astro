@@ -1,25 +1,64 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import SoftwareHero from '../components/SoftwareHero.astro';
-import SoftwareServices from '../components/SoftwareServices.astro';
-import SoftwareProcess from '../components/SoftwareProcess.astro';
-import SoftwareWhy from '../components/SoftwareWhy.astro';
-import SoftwareCta from '../components/SoftwareCta.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
-import { softwarePage } from '../utils/content';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import ServiceGrid from '../components/ServiceGrid.astro';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import PricingTable from '../components/PricingTable.astro';
+import FounderCard from '../components/FounderCard.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { softwarePage, softwarePlans, softwarePriceNote } from '../utils/content';
 import { WHATSAPP_SOFTWARE_URL } from '../utils/links';
 ---
 
 <Layout title={softwarePage.seo.title} description={softwarePage.seo.description}>
   <Header />
   <main>
-    <SoftwareHero />
-    <SoftwareServices />
-    <SoftwareProcess />
-    <SoftwareWhy />
-    <SoftwareCta />
+    <PageHero content={softwarePage.hero} primaryHref={WHATSAPP_SOFTWARE_URL} />
+
+    <Section id="servicios">
+      <ServiceGrid
+        title={softwarePage.servicesTitle}
+        subtitle={softwarePage.servicesSubtitle}
+        services={softwarePage.services}
+      />
+    </Section>
+
+    <Section id="como-trabajamos" tone="lavender">
+      <ProcessSteps
+        title={softwarePage.processTitle}
+        subtitle={softwarePage.processSubtitle}
+        steps={softwarePage.process}
+      />
+    </Section>
+
+    <Section id="precios">
+      <div class="mb-10 reveal">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">{softwarePage.pricingTitle}</h2>
+      </div>
+      <PricingTable plans={softwarePlans} note={softwarePriceNote} />
+    </Section>
+
+    <Section tone="lavender">
+      <FounderCard title={softwarePage.founderTitle} />
+    </Section>
+
+    <Section>
+      <Faq title={softwarePage.faqTitle} items={softwarePage.faq} />
+    </Section>
+
+    <Section tone="dark">
+      <FinalCta
+        title={softwarePage.ctaTitle}
+        subtitle={softwarePage.ctaSubtitle}
+        primaryLabel={softwarePage.ctaLabel}
+        primaryHref={WHATSAPP_SOFTWARE_URL}
+      />
+    </Section>
   </main>
   <Footer />
   <WhatsAppFloat href={WHATSAPP_SOFTWARE_URL} />

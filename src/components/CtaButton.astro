@@ -1,0 +1,30 @@
+---
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary' | 'inverse';
+  external?: boolean;
+  label?: string;
+}
+
+const { href, variant = 'primary', external = false, label } = Astro.props;
+const isExternal = external || href.startsWith('https://wa.me');
+const variants = {
+  primary:
+    'inline-flex w-full sm:w-auto items-center justify-center bg-tecni-purple text-white font-medium px-6 py-3 rounded-xl hover:bg-tecni-purple/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tecni-purple transition',
+  secondary:
+    'inline-flex w-full sm:w-auto items-center justify-center text-tecni-purple font-medium px-2 py-3 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tecni-purple',
+  inverse:
+    'inline-flex w-full sm:w-auto items-center justify-center bg-white text-tecni-purple font-medium px-6 py-3 rounded-xl hover:bg-tecni-lavender focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition',
+};
+const classes = variants[variant];
+---
+
+<a
+  href={href}
+  class={classes}
+  target={isExternal ? '_blank' : undefined}
+  rel={isExternal ? 'noopener noreferrer' : undefined}
+  aria-label={label}
+>
+  <slot />
+</a>

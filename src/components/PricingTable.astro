@@ -1,0 +1,76 @@
+---
+import type { Plan } from '../utils/content';
+import { buildPlanWhatsAppUrl, buildWhatsAppUrl } from '../utils/links';
+import CtaButton from './CtaButton.astro';
+
+interface Props {
+  plans: Plan[];
+  note?: string;
+}
+
+const { plans, note } = Astro.props;
+---
+
+<div>
+  {
+    note && (
+      <p class="text-sm text-tecni-dark/50 mb-8 reveal">{note}</p>
+    )
+  }
+  <div class={`grid gap-6 reveal-cascade ${plans.length > 3 ? 'md:grid-cols-2 lg:grid-cols-3' : 'md:grid-cols-3'}`}>
+    {
+      plans.map((plan) => (
+        <article
+          class:list={[
+            'reveal flex flex-col gap-5 p-6 rounded-2xl border',
+            plan.highlighted
+              ? 'border-tecni-purple bg-tecni-purple text-white'
+              : 'border-tecni-lilac/40 bg-white',
+          ]}
+        >
+          <div>
+            <h3
+              class:list={[
+                'text-sm font-medium mb-1',
+                plan.highlighted ? 'text-white/70' : 'text-tecni-dark/50',
+              ]}
+            >
+              {plan.name}
+            </h3>
+            <p class="text-2xl font-bold">{plan.price}</p>
+            <p
+              class:list={[
+                'text-sm mt-2 leading-relaxed',
+                plan.highlighted ? 'text-white/80' : 'text-tecni-dark/60',
+              ]}
+            >
+              {plan.description}
+            </p>
+          </div>
+          <ul class="flex flex-col gap-2 flex-1">
+            {plan.features.map((feature) => (
+              <li
+                class:list={[
+                  'text-sm',
+                  plan.highlighted ? 'text-white/80' : 'text-tecni-dark/70',
+                ]}
+              >
+                {feature}
+              </li>
+            ))}
+          </ul>
+          <CtaButton
+            href={
+              plan.whatsappMessage
+                ? buildWhatsAppUrl(plan.whatsappMessage)
+                : buildPlanWhatsAppUrl(plan.name)
+            }
+            variant={plan.highlighted ? 'inverse' : 'primary'}
+          >
+            {plan.cta}
+          </CtaButton>
+        </article>
+      ))
+    }
+  </div>
+</div>

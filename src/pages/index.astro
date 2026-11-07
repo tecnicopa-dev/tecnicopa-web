@@ -1,31 +1,75 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import Services from '../components/Services.astro';
-import SoftwareBanner from '../components/SoftwareBanner.astro';
-import WhyUs from '../components/WhyUs.astro';
-import Pricing from '../components/Pricing.astro';
-import About from '../components/About.astro';
-import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import Section from '../components/Section.astro';
+import LineCards from '../components/LineCards.astro';
+import TrustBar from '../components/TrustBar.astro';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import PricingTabs from '../components/PricingTabs.astro';
+import FounderCard from '../components/FounderCard.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { home, homeSoftwarePlans, homeSupportPlans, softwarePriceNote } from '../utils/content';
+import { WHATSAPP_SOFTWARE_URL, WHATSAPP_SUPPORT_URL, WHATSAPP_URL } from '../utils/links';
 ---
 
-<Layout
-  title="TecniCopa | Soporte Técnico a Domicilio en Copacabana, Antioquia"
-  description="Soporte técnico de computadores a domicilio en Copacabana. Garantía escrita y comprobante de pago. Mantenimiento, formateo, antivirus, soporte remoto y más."
->
+<Layout title={home.seo.title} description={home.seo.description}>
   <Header />
   <main>
-    <Hero />
-    <Services />
-    <SoftwareBanner />
-    <WhyUs />
-    <Pricing />
-    <About />
-    <Contact />
+    <section class="min-h-[80vh] flex items-center pt-16">
+      <div class="max-w-6xl mx-auto px-4 py-16 md:py-24 flex flex-col gap-12">
+        <div class="max-w-3xl reveal">
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-tecni-dark leading-tight mb-4">
+            {home.hero.title}
+          </h1>
+          <p class="text-lg text-tecni-dark/70">{home.hero.subtitle}</p>
+        </div>
+        <LineCards lines={home.lines} />
+      </div>
+    </section>
+
+    <Section tone="lavender">
+      <TrustBar points={home.trust} />
+    </Section>
+
+    <Section>
+      <ProcessSteps title={home.processTitle} steps={home.process} />
+    </Section>
+
+    <Section id="precios" tone="lavender">
+      <div class="mb-10 reveal">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">{home.pricingTitle}</h2>
+        <p class="text-tecni-dark/60">{home.pricingSubtitle}</p>
+      </div>
+      <PricingTabs
+        supportPlans={homeSupportPlans}
+        softwarePlans={homeSoftwarePlans}
+        softwareNote={softwarePriceNote}
+      />
+    </Section>
+
+    <Section>
+      <FounderCard title={home.founderTitle} />
+    </Section>
+
+    <Section tone="lavender">
+      <Faq title={home.faqTitle} items={home.faq} />
+    </Section>
+
+    <Section tone="dark">
+      <FinalCta
+        title={home.ctaTitle}
+        subtitle={home.ctaSubtitle}
+        primaryLabel={home.ctaSupport}
+        primaryHref={WHATSAPP_SUPPORT_URL}
+        secondaryLabel={home.ctaSoftware}
+        secondaryHref={WHATSAPP_SOFTWARE_URL}
+        equal
+      />
+    </Section>
   </main>
   <Footer />
-  <WhatsAppFloat />
+  <WhatsAppFloat href={WHATSAPP_URL} />
 </Layout>

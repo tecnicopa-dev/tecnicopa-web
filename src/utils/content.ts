@@ -3,10 +3,19 @@ export interface NavLink {
   label: string;
 }
 
-export interface Service {
+export interface SeoContent {
   title: string;
   description: string;
-  icon: string;
+}
+
+export interface CtaLink {
+  label: string;
+  href: string;
+}
+
+export interface ServiceItem {
+  title: string;
+  description: string;
 }
 
 export interface Plan {
@@ -16,40 +25,43 @@ export interface Plan {
   features: string[];
   cta: string;
   highlighted: boolean;
+  showOnHome: boolean;
+  whatsappMessage?: string;
 }
 
-export interface Reason {
+export interface ProcessStep {
+  step: number;
   title: string;
   description: string;
 }
 
-export interface AboutHighlight {
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface LineCard {
   title: string;
   subtitle: string;
-  icon: 'location' | 'partner';
+  href: string;
+  cta: string;
 }
 
-export interface AboutFounder {
+export interface TrustPoint {
+  title: string;
+  description: string;
+}
+
+export interface FounderContent {
   name: string;
   role: string;
-  description: string;
+  bio: string;
+  honestLine: string;
+  portfolioLabel: string;
+  githubLabel: string;
 }
 
-export interface AboutContent {
-  badge: string;
-  title: string;
-  paragraphs: string[];
-  highlights: AboutHighlight[];
-  founderTitle: string;
-  founder: AboutFounder;
-}
-
-export interface SoftwareSeo {
-  title: string;
-  description: string;
-}
-
-export interface SoftwareHero {
+export interface PageHero {
   badge: string;
   title: string;
   subtitle: string;
@@ -58,280 +70,391 @@ export interface SoftwareHero {
   secondaryHref: string;
 }
 
-export interface SoftwareService {
-  title: string;
-  description: string;
-}
-
-export interface SoftwareProcessStep {
-  step: number;
-  title: string;
-  description: string;
-}
-
-export interface SoftwareCta {
-  title: string;
-  description: string;
-  button: string;
-}
-
-export interface SoftwareHomeBanner {
-  text: string;
-  button: string;
-}
-
-export interface SoftwarePage {
-  seo: SoftwareSeo;
-  hero: SoftwareHero;
-  servicesTitle: string;
-  servicesSubtitle: string;
-  services: SoftwareService[];
-  processTitle: string;
-  processSubtitle: string;
-  process: SoftwareProcessStep[];
-  reasonsTitle: string;
-  reasonsSubtitle: string;
-  reasons: Reason[];
-  cta: SoftwareCta;
-  homeBanner: SoftwareHomeBanner;
-}
-
 export const NAV_LINKS: NavLink[] = [
-  { href: '/#servicios', label: 'Servicios' },
-  { href: '/#por-que', label: '¿Por qué nosotros?' },
-  { href: '/#precios', label: 'Precios' },
-  { href: '/#nosotros', label: 'Nosotros' },
+  { href: '/soporte-tecnico', label: 'Soporte técnico' },
   { href: '/software', label: 'Software' },
-  { href: '/#contacto', label: 'Contacto' },
+  { href: '/#precios', label: 'Precios' },
 ];
 
-export const services: Service[] = [
-  {
-    title: 'Mantenimiento preventivo y correctivo',
-    description:
-      'Limpieza interna profunda, cambio de pasta térmica y revisión completa del hardware. Tu equipo corre más rápido y dura más años.',
-    icon: '🔧',
-  },
-  {
-    title: 'Formateo e instalación de sistema operativo',
-    description:
-      'Instalamos Windows, Linux o macOS desde cero con todos los drivers, actualizaciones y programas esenciales ya listos.',
-    icon: '💿',
-  },
-  {
-    title: 'Eliminación de virus y malware',
-    description:
-      '¿Tu PC está lento, muestra ventanas raras o se apaga solo? Lo analizamos, eliminamos las amenazas y lo dejamos seguro.',
-    icon: '🛡️',
-  },
-  {
-    title: 'Soporte remoto',
-    description:
-      'Resolvemos problemas de software sin movernos de donde estás. Rápido, seguro y sin desplazamientos.',
-    icon: '🖥️',
-  },
-];
+export const headerCtaLabel = 'Escríbenos';
 
-export const plans: Plan[] = [
+export const founder: FounderContent = {
+  name: 'Santiago Molano',
+  role: 'Fundador',
+  bio: 'Más de 4 años desarrollando software en banca, fintech y salud digital.',
+  honestLine:
+    'El soporte técnico lo realiza un técnico aliado; TecniCopa coordina, garantiza y hace el seguimiento.',
+  portfolioLabel: 'Portafolio',
+  githubLabel: 'GitHub',
+};
+
+export const softwarePriceNote =
+  'Valores de referencia; el valor final depende del alcance.';
+
+export const home = {
+  seo: {
+    title: 'TecniCopa | Soporte técnico y software',
+    description:
+      'Soporte técnico a domicilio en Copacabana y software a la medida para empresas en Colombia. Garantía escrita y trato directo.',
+  } satisfies SeoContent,
+  hero: {
+    title: 'Tecnología que funciona para ti y tu empresa',
+    subtitle: 'Soporte a domicilio y software a la medida, con cara y nombre.',
+  },
+  lines: [
+    {
+      title: 'Soporte técnico',
+      subtitle: 'Tu computador como nuevo, a domicilio',
+      href: '/soporte-tecnico',
+      cta: 'Ver soporte técnico',
+    },
+    {
+      title: 'Software y automatización',
+      subtitle: 'Deja de perder horas en tareas manuales',
+      href: '/software',
+      cta: 'Ver software',
+    },
+  ] satisfies LineCard[],
+  trust: [
+    { title: 'Garantía escrita', description: 'Si el problema vuelve, lo resolvemos.' },
+    { title: 'Trato directo', description: 'Hablas con quien coordina o desarrolla.' },
+    { title: 'Seguimiento', description: 'Te contactamos después de cada entrega.' },
+  ] satisfies TrustPoint[],
+  processTitle: 'Cómo trabajamos',
+  process: [
+    {
+      step: 1,
+      title: 'Nos cuentas',
+      description: 'El computador, el proceso o el proyecto. Sin tecnicismos.',
+    },
+    {
+      step: 2,
+      title: 'Te proponemos',
+      description: 'Alcance claro, tiempos y valor. Sin letra pequeña.',
+    },
+    {
+      step: 3,
+      title: 'Lo resolvemos y hacemos seguimiento',
+      description: 'Entregamos, te acompañamos y confirmamos que quedó bien.',
+    },
+  ] satisfies ProcessStep[],
+  pricingTitle: 'Precios',
+  pricingSubtitle: 'Referencia clara. El detalle está en cada línea.',
+  supportTab: 'Soporte',
+  softwareTab: 'Software',
+  viewAllSupport: 'Ver todos los precios de soporte',
+  viewAllSoftware: 'Ver todos los precios de software',
+  founderTitle: 'Quién está detrás',
+  faqTitle: 'Preguntas frecuentes',
+  faq: [
+    {
+      question: '¿Van a domicilio?',
+      answer:
+        'Sí. Atendemos Copacabana, Girardota y Bello norte. También resolvemos por remoto cuando aplica.',
+    },
+    {
+      question: '¿El soporte lo hace el fundador?',
+      answer:
+        'Lo realiza un técnico aliado de confianza. TecniCopa coordina, responde por la garantía escrita y hace el seguimiento a los 7 días.',
+    },
+    {
+      question: '¿Trabajan software para empresas fuera de Antioquia?',
+      answer:
+        'Sí. El desarrollo y la automatización son remotos, para empresas en toda Colombia.',
+    },
+    {
+      question: '¿El diagnóstico de software tiene costo?',
+      answer:
+        'No. Revisamos tu proceso 30 minutos sin costo y te decimos si vale la pena automatizarlo.',
+    },
+    {
+      question: '¿Hay garantía en el soporte técnico?',
+      answer:
+        'Sí. Garantía escrita en cada servicio. Si el problema vuelve en el plazo acordado, lo resolvemos sin costo extra.',
+    },
+    {
+      question: '¿Cómo se cotiza un desarrollo?',
+      answer:
+        'Después del diagnóstico te enviamos alcance, tiempos y valor. El precio final depende de lo que haya que construir.',
+    },
+  ] satisfies FaqItem[],
+  ctaTitle: 'Cuéntanos qué necesitas',
+  ctaSubtitle: 'Escríbenos por WhatsApp. Te respondemos y te decimos el siguiente paso.',
+  ctaSupport: 'Agendar soporte técnico',
+  ctaSoftware: 'Cotizar un proyecto de software',
+};
+
+export const supportPage = {
+  seo: {
+    title: 'TecniCopa | Soporte Técnico a Domicilio en Copacabana, Antioquia',
+    description:
+      'Soporte técnico de computadores a domicilio en Copacabana. Garantía escrita y comprobante de pago. Mantenimiento, formateo, antivirus, soporte remoto y más.',
+  } satisfies SeoContent,
+  hero: {
+    badge: 'A domicilio en Copacabana',
+    title: '¿Tu PC anda lento? Lo arreglamos.',
+    subtitle: 'Soporte técnico con garantía escrita. Escríbenos y te ayudamos hoy.',
+    primaryCta: 'Agendar servicio',
+    secondaryCta: 'Ver precios',
+    secondaryHref: '#precios',
+  } satisfies PageHero,
+  servicesTitle: 'Qué resolvemos',
+  servicesSubtitle: 'Los problemas más comunes, sin tecnicismos ni sorpresas.',
+  services: [
+    {
+      title: 'Mantenimiento preventivo y correctivo',
+      description:
+        'Limpieza interna, pasta térmica y revisión de hardware. Tu equipo corre más rápido y dura más.',
+    },
+    {
+      title: 'Formateo e instalación de sistema',
+      description:
+        'Windows, Linux o macOS desde cero, con drivers, actualizaciones y programas esenciales.',
+    },
+    {
+      title: 'Eliminación de virus y malware',
+      description: 'Si está lento, muestra ventanas raras o se apaga solo, lo dejamos seguro.',
+    },
+    {
+      title: 'Soporte remoto',
+      description: 'Problemas de software sin desplazarte. Rápido y sin llevar el equipo.',
+    },
+  ] satisfies ServiceItem[],
+  extraTitle: 'También ofrecemos',
+  extras: [
+    'Ensamble de PCs a la medida',
+    'Actualización de RAM y SSD',
+    'Instalación de software',
+    'Configuración de redes WiFi',
+    'Asesoría en compra de equipos',
+    'Cotización y compra de componentes',
+  ],
+  reasonsTitle: 'Por qué TecniCopa',
+  reasons: [
+    {
+      title: 'Garantía escrita en cada servicio',
+      description: 'Si el problema vuelve en el plazo acordado, lo resolvemos sin costo extra.',
+    },
+    {
+      title: 'Comprobante de pago',
+      description: 'Sabes qué pagaste y cuánto. Transparencia total.',
+    },
+    {
+      title: 'Seguimiento a los 7 días',
+      description: 'Te contactamos para confirmar que todo sigue bien.',
+    },
+    {
+      title: 'Somos de acá',
+      description: 'Copacabana, Girardota y Bello norte. Sin cobros extra desde Medellín.',
+    },
+  ] satisfies TrustPoint[],
+  pricingTitle: 'Precios de soporte',
+  pricingSubtitle: 'Lo que cotizamos es lo que pagas. Sin cobros ocultos.',
+  coverageTitle: 'Cobertura',
+  coverage: 'Copacabana, Girardota y Bello norte. Remoto donde aplique.',
+  ctaTitle: '¿Listo para agendar?',
+  ctaSubtitle: 'Escríbenos por WhatsApp y te cotizamos sin compromiso.',
+  ctaLabel: 'Agendar soporte técnico',
+};
+
+export const supportPlans: Plan[] = [
   {
     name: 'Diagnóstico a domicilio',
     price: 'Desde $80.000',
-    description:
-      'Revisamos tu equipo, identificamos el problema y te decimos exactamente qué tiene y cuánto cuesta arreglarlo.',
+    description: 'Identificamos el problema y te decimos qué tiene y cuánto cuesta arreglarlo.',
     features: [
-      'Revisión completa de hardware y software',
-      'Informe claro y sin tecnicismos',
+      'Revisión de hardware y software',
+      'Informe claro, sin tecnicismos',
       'Sin compromiso de reparación',
-      'Atención a domicilio en Copacabana',
+      'A domicilio en Copacabana',
     ],
     cta: 'Solicitar diagnóstico',
     highlighted: false,
+    showOnHome: true,
   },
   {
     name: 'Mantenimiento',
     price: 'Desde $100.000',
-    description:
-      'Limpieza completa, pasta térmica nueva y optimización del sistema. El servicio más pedido por nuestros clientes.',
+    description: 'Limpieza, pasta térmica nueva y optimización del sistema.',
     features: [
       'Limpieza interna profunda',
       'Cambio de pasta térmica',
-      'Optimización del sistema operativo',
-      'Garantía escrita incluida',
+      'Optimización del sistema',
+      'Garantía escrita',
       'Comprobante de pago',
       'Seguimiento a los 7 días',
     ],
     cta: 'Agendar mantenimiento',
     highlighted: true,
+    showOnHome: true,
   },
   {
     name: 'Formateo completo',
     price: 'Desde $100.000',
-    description:
-      'Instalación limpia del sistema operativo con drivers, actualizaciones y programas esenciales. Como nuevo.',
+    description: 'Instalación limpia del sistema, drivers y programas esenciales.',
     features: [
       'Windows, Linux o macOS',
       'Drivers e instalación completa',
-      'Programas esenciales incluidos',
-      'Garantía escrita incluida',
+      'Programas esenciales',
+      'Garantía escrita',
       'Comprobante de pago',
     ],
     cta: 'Agendar formateo',
     highlighted: false,
+    showOnHome: true,
   },
 ];
 
-export const reasons: Reason[] = [
-  {
-    title: 'Garantía escrita en cada servicio',
-    description:
-      'Si el problema vuelve dentro del plazo acordado, lo resolvemos sin costo adicional. Cero letra pequeña.',
-  },
-  {
-    title: 'Comprobante de pago en cada servicio',
-    description:
-      'Te entregamos comprobante de todo lo que pagas. Sabes exactamente por qué servicio pagaste y cuánto. Transparencia total.',
-  },
-  {
-    title: 'Seguimiento a los 7 días',
-    description:
-      'Después de cada servicio te contactamos para asegurarnos de que todo sigue funcionando. No desaparecemos una vez cobrado.',
-  },
-  {
-    title: 'Somos de acá, conocemos el municipio',
-    description:
-      'Vivimos y trabajamos en Copacabana. Llegamos rápido, sin cobros extra de desplazamiento desde Medellín.',
-  },
-];
-
-export const about: AboutContent = {
-  badge: 'Quiénes somos',
-  title: 'Soporte técnico con cara y nombre',
-  paragraphs: [
-    'TecniCopa nació con una idea clara: llevar soporte técnico profesional a las personas que lo necesitan en Copacabana, sin que tengan que desplazarse al centro o confiar en alguien que "cree que sabe".',
-    'Somos una empresa local con identidad propia, garantía escrita y comprobante de pago en cada servicio. Nuestro objetivo no es solo arreglar tu computador — es que te quedes tranquilo y vuelvas cuando necesites ayuda.',
-    'Los servicios técnicos los realiza un técnico aliado de confianza. TecniCopa coordina el servicio, responde por la garantía escrita y hace el seguimiento a los 7 días.',
-  ],
-  highlights: [
-    {
-      icon: 'location',
-      title: 'Copacabana, Antioquia',
-      subtitle: 'Atendemos también Girardota y Bello norte',
-    },
-    {
-      icon: 'partner',
-      title: 'Técnico aliado con experiencia',
-      subtitle: 'Coordinamos, garantizamos y hacemos seguimiento',
-    },
-  ],
-  founderTitle: 'El fundador',
-  founder: {
-    name: 'Santiago Molano',
-    role: 'Fundador',
-    description:
-      'Desarrollo de software, automatización y coordinación de servicios técnicos',
-  },
-};
-
-export const softwarePage: SoftwarePage = {
+export const softwarePage = {
   seo: {
     title: 'Software a medida y automatización | TecniCopa',
     description:
       'Desarrollamos software a la medida y automatizamos procesos para empresas en toda Colombia. Diagnóstico sin costo y trato directo con quien desarrolla.',
-  },
+  } satisfies SeoContent,
   hero: {
-    badge: 'Software para empresas en Colombia',
-    title: '¿Tu equipo pierde horas en tareas manuales? Las automatizamos.',
-    subtitle:
-      'Software a la medida y automatización de procesos para empresas en toda Colombia. Trabajamos remoto, con trato directo y un alcance claro desde el inicio.',
-    primaryCta: 'Cotizar un desarrollo',
+    badge: 'Para empresas en Colombia',
+    title: '¿Tu equipo pierde horas en tareas manuales?',
+    subtitle: 'Las automatizamos. Software a la medida, remoto, con trato directo.',
+    primaryCta: 'Cotizar un proyecto',
     secondaryCta: 'Cómo trabajamos',
     secondaryHref: '#como-trabajamos',
-  },
-  servicesTitle: 'Qué podemos construir juntos',
-  servicesSubtitle:
-    'Si hoy se hace a mano, se puede ordenar, conectar y dejar corriendo solo. El valor depende del alcance.',
+  } satisfies PageHero,
+  servicesTitle: 'Qué podemos construir',
+  servicesSubtitle: 'Si hoy se hace a mano, se puede ordenar y dejar corriendo solo.',
   services: [
     {
       title: 'Software a la medida',
-      description:
-        'Aplicaciones web y móviles hechas para tu operación. Nos cuentas el problema y lo convertimos en una herramienta que tu equipo sí use.',
+      description: 'Aplicaciones web y móviles hechas para tu operación, no plantillas genéricas.',
     },
     {
       title: 'Automatización de procesos',
-      description:
-        'Tareas repetitivas, reportes y flujos entre áreas. Si cada semana copian datos o pasan información a mano, lo dejamos corriendo solo.',
+      description: 'Reportes, documentos y flujos entre áreas. Menos copiar y pegar.',
     },
     {
       title: 'Integraciones e inteligencia artificial',
-      description:
-        'Conectamos los sistemas que ya usas y ayudamos a leer y analizar documentos, para que nadie tenga que hacerlo a mano.',
+      description: 'Conectamos sistemas y ayudamos a leer documentos para no hacerlo a mano.',
     },
     {
       title: 'Sitios web para empresas',
-      description:
-        'Una web clara, rápida y hecha para que tus clientes te encuentren y te escriban. Sin vueltas innecesarias.',
+      description: 'Una web clara, rápida y lista para que te escriban.',
     },
-  ],
+    {
+      title: 'Consultoría técnica',
+      description: 'Arquitectura, tecnología o revisión de un proyecto. Por hora.',
+    },
+    {
+      title: 'Soporte mensual de software',
+      description: 'Mantenimiento, ajustes y monitoreo de lo que ya construimos.',
+    },
+  ] satisfies ServiceItem[],
   processTitle: 'Cómo trabajamos',
-  processSubtitle: 'Cuatro pasos claros, sin letra pequeña y con avances que puedes ver.',
+  processSubtitle: 'Cuatro pasos. Avances que puedes ver.',
   process: [
     {
       step: 1,
-      title: 'Diagnóstico sin costo del proceso',
-      description:
-        'Revisamos cómo trabajan hoy, qué les quita tiempo y qué vale la pena automatizar. Sin compromiso y sin costo.',
+      title: 'Diagnóstico sin costo',
+      description: 'Revisamos tu proceso 30 minutos. Sin compromiso.',
     },
     {
       step: 2,
-      title: 'Propuesta con alcance, tiempos y valor',
-      description:
-        'Te entregamos una propuesta clara: qué se hace, cuánto tarda y cuánto cuesta. El valor se define según el alcance.',
+      title: 'Propuesta con alcance, tiempo y valor',
+      description: 'Qué se hace, cuánto tarda y cuánto cuesta. Según el alcance.',
     },
     {
       step: 3,
-      title: 'Desarrollo por etapas con demos frecuentes',
-      description:
-        'Avanzamos por partes y te mostramos avances reales. Ves cómo queda, comentas y seguimos.',
+      title: 'Desarrollo por etapas con demos',
+      description: 'Ves avances reales, comentas y seguimos.',
     },
     {
       step: 4,
       title: 'Entrega, capacitación y soporte',
-      description:
-        'Te dejamos la herramienta funcionando, te enseñamos a usarla y quedamos pendientes después de la entrega.',
+      description: 'Queda funcionando, te enseñamos a usarlo y quedamos pendientes.',
     },
-  ],
-  reasonsTitle: 'Por qué TecniCopa',
-  reasonsSubtitle: 'Desarrollo cercano, con avances que se ven y sin perder el control de lo construido.',
-  reasons: [
+  ] satisfies ProcessStep[],
+  pricingTitle: 'Precios de software',
+  founderTitle: 'Quién desarrolla',
+  faqTitle: 'Preguntas de software',
+  faq: [
     {
-      title: 'Trato directo con quien desarrolla',
-      description:
-        'Hablas con Santiago, quien diseña y programa. Sin intermediarios ni filtros de por medio.',
-    },
-    {
-      title: 'Avances visibles en cada etapa',
-      description:
-        'No esperas meses para ver algo. En cada etapa te mostramos un avance real y tomamos decisiones juntos.',
+      question: '¿El diagnóstico tiene costo?',
+      answer: 'No. 30 minutos para entender el proceso y decirte si se puede automatizar.',
     },
     {
-      title: 'Documentación de lo construido',
-      description:
-        'Te entregamos documentado lo que se hizo, cómo se usa y cómo se mantiene. Nada queda solo en la cabeza de alguien.',
+      question: '¿Trabajan remoto en toda Colombia?',
+      answer: 'Sí. El desarrollo es remoto. Hablas directo con Santiago, quien programa.',
     },
     {
-      title: 'Buenas prácticas profesionales',
-      description:
-        'Dejamos todo organizado para que mañana se pueda entender, ajustar y crecer. Sin atajos que después salen caros.',
+      question: '¿Por qué los precios dicen “desde”?',
+      answer:
+        'Son valores de referencia. El valor final depende del alcance. Te lo dejamos por escrito antes de empezar.',
     },
-  ],
-  cta: {
-    title: 'Cuéntanos qué proceso quieres automatizar',
-    description:
-      'Escríbenos por WhatsApp, cuéntanos cómo trabajan hoy y te decimos si vale la pena automatizarlo. El diagnóstico del proceso no tiene costo.',
-    button: 'Escribir por WhatsApp',
-  },
-  homeBanner: {
-    text: '¿Tienes una empresa? También desarrollamos software y automatizamos procesos',
-    button: 'Ver software',
-  },
+    {
+      question: '¿Puedo pedir solo una consultoría?',
+      answer: 'Sí. Una hora para arquitectura, tecnología o revisar un proyecto que ya tienes.',
+    },
+  ] satisfies FaqItem[],
+  ctaTitle: 'Cuéntanos qué proceso quieres automatizar',
+  ctaSubtitle: 'El diagnóstico del proceso no tiene costo.',
+  ctaLabel: 'Cotizar un proyecto de software',
 };
+
+export const softwarePlans: Plan[] = [
+  {
+    name: 'Diagnóstico',
+    price: 'Gratis (30 min)',
+    description: 'Llamada para entender tu proceso y decirte si se puede automatizar.',
+    features: ['30 minutos', 'Sin compromiso', 'Recomendación clara'],
+    cta: 'Agendar diagnóstico',
+    highlighted: false,
+    showOnHome: true,
+  },
+  {
+    name: 'Consultoría técnica',
+    price: 'Desde $90.000 / hora',
+    description: 'Asesoría en arquitectura, tecnología o revisión de un proyecto.',
+    features: ['Por hora', 'Arquitectura o revisión', 'Recomendación accionable'],
+    cta: 'Agendar consultoría',
+    highlighted: false,
+    showOnHome: false,
+    whatsappMessage: 'Hola, quiero agendar una consultoría técnica',
+  },
+  {
+    name: 'Landing page / sitio web',
+    price: 'Desde $1.200.000',
+    description: 'Sitio rápido, SEO básico, responsive, listo para vender.',
+    features: ['Responsive', 'SEO básico', 'Listo para publicar'],
+    cta: 'Cotizar sitio web',
+    highlighted: false,
+    showOnHome: false,
+  },
+  {
+    name: 'Automatización de procesos',
+    price: 'Desde $1.800.000',
+    description: 'Automatizar una tarea o flujo concreto: reportes, documentos o integraciones.',
+    features: ['Un flujo concreto', 'Menos trabajo manual', 'Entrega con capacitación'],
+    cta: 'Cotizar automatización',
+    highlighted: true,
+    showOnHome: true,
+  },
+  {
+    name: 'Software a la medida',
+    price: 'Desde $6.000.000 · según alcance',
+    description: 'Aplicación web o móvil a la medida, por etapas con demos.',
+    features: ['Web o móvil', 'Por etapas con demos', 'Documentación de lo construido'],
+    cta: 'Cotizar software',
+    highlighted: false,
+    showOnHome: true,
+  },
+  {
+    name: 'Soporte mensual de software',
+    price: 'Desde $250.000 / mes',
+    description: 'Mantenimiento, ajustes y monitoreo de tu software.',
+    features: ['Ajustes mensuales', 'Monitoreo', 'Prioridad de soporte'],
+    cta: 'Pedir soporte mensual',
+    highlighted: false,
+    showOnHome: false,
+  },
+];
+
+export const homeSupportPlans = supportPlans.filter((plan) => plan.showOnHome);
+export const homeSoftwarePlans = softwarePlans.filter((plan) => plan.showOnHome);

@@ -1,0 +1,113 @@
+---
+import type { Plan } from '../utils/content';
+import { home } from '../utils/content';
+import PricingTable from './PricingTable.astro';
+
+interface Props {
+  supportPlans: Plan[];
+  softwarePlans: Plan[];
+  softwareNote: string;
+}
+
+const { supportPlans, softwarePlans, softwareNote } = Astro.props;
+---
+
+<div data-pricing-tabs>
+  <div class="flex flex-col sm:flex-row gap-3 mb-10 reveal" hidden data-tablist role="tablist" aria-label="Precios por línea">
+    <button
+      type="button"
+      role="tab"
+      id="tab-soporte"
+      aria-controls="panel-soporte"
+      aria-selected="true"
+      data-tab="soporte"
+      class="px-5 py-2 rounded-full text-sm font-medium border border-tecni-purple bg-tecni-purple text-white"
+    >
+      {home.supportTab}
+    </button>
+    <button
+      type="button"
+      role="tab"
+      id="tab-software"
+      aria-controls="panel-software"
+      aria-selected="false"
+      data-tab="software"
+      class="px-5 py-2 rounded-full text-sm font-medium border border-tecni-lilac text-tecni-dark"
+    >
+      {home.softwareTab}
+    </button>
+  </div>
+
+  <div
+    id="panel-soporte"
+    role="tabpanel"
+    aria-labelledby="tab-soporte"
+    data-panel="soporte"
+  >
+    <h3 class="text-xl font-bold mb-6" data-fallback-title>Soporte técnico</h3>
+    <PricingTable plans={supportPlans} />
+    <p class="mt-6">
+      <a href="/soporte-tecnico#precios" class="text-tecni-purple font-medium underline-offset-4 hover:underline">
+        {home.viewAllSupport}
+      </a>
+    </p>
+  </div>
+
+  <div
+    id="panel-software"
+    role="tabpanel"
+    aria-labelledby="tab-software"
+    data-panel="software"
+    class="mt-16"
+  >
+    <h3 class="text-xl font-bold mb-6" data-fallback-title>Software</h3>
+    <PricingTable plans={softwarePlans} note={softwareNote} />
+    <p class="mt-6">
+      <a href="/software#precios" class="text-tecni-purple font-medium underline-offset-4 hover:underline">
+        {home.viewAllSoftware}
+      </a>
+    </p>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector('[data-pricing-tabs]');
+  if (root) {
+    const tablist = root.querySelector<HTMLElement>('[data-tablist]');
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-panel]')];
+    const titles = [...root.querySelectorAll<HTMLElement>('[data-fallback-title]')];
+
+    const select = (name: string) => {
+      tabs.forEach((tab) => {
+        const selected = tab.dataset.tab === name;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.classList.toggle('bg-tecni-purple', selected);
+        tab.classList.toggle('text-white', selected);
+        tab.classList.toggle('border-tecni-purple', selected);
+        tab.classList.toggle('border-tecni-lilac', !selected);
+        tab.classList.toggle('text-tecni-dark', !selected);
+      });
+      panels.forEach((panel) => {
+        const selected = panel.dataset.panel === name;
+        panel.hidden = !selected;
+        panel.classList.toggle('mt-16', false);
+      });
+    };
+
+    tablist?.removeAttribute('hidden');
+    titles.forEach((title) => title.classList.add('hidden'));
+    select('soporte');
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => select(tab.dataset.tab ?? 'soporte'));
+      tab.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+        event.preventDefault();
+        const next = event.key === 'ArrowRight' ? (index + 1) % tabs.length : (index - 1 + tabs.length) % tabs.length;
+        tabs[next]?.focus();
+        select(tabs[next]?.dataset.tab ?? 'soporte');
+      });
+    });
+  }
+</script>
