@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import SoftwareHero from '../components/SoftwareHero.astro';
+import SoftwareServices from '../components/SoftwareServices.astro';
+import SoftwareProcess from '../components/SoftwareProcess.astro';
+import SoftwareWhy from '../components/SoftwareWhy.astro';
+import SoftwareCta from '../components/SoftwareCta.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import { softwarePage } from '../utils/content';
+import { WHATSAPP_SOFTWARE_URL } from '../utils/links';
+---
+
+<Layout title={softwarePage.seo.title} description={softwarePage.seo.description}>
+  <Header />
+  <main>
+    <SoftwareHero />
+    <SoftwareServices />
+    <SoftwareProcess />
+    <SoftwareWhy />
+    <SoftwareCta />
+  </main>
+  <Footer />
+  <WhatsAppFloat href={WHATSAPP_SOFTWARE_URL} />
+</Layout>

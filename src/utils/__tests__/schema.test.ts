@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { schemaOrg } from '../schema';
+import { schemaOrg, softwareServiceSchema } from '../schema';
 
 describe('schemaOrg', () => {
   it('has the schema.org @context', () => {
@@ -65,5 +65,38 @@ describe('schemaOrg', () => {
   it('has a Person founder', () => {
     expect(schemaOrg.founder['@type']).toBe('Person');
     expect(schemaOrg.founder.name).toBe('Santiago Molano');
+  });
+});
+
+describe('softwareServiceSchema', () => {
+  it('is a Service with ProfessionalService additionalType', () => {
+    expect(softwareServiceSchema['@context']).toBe('https://schema.org');
+    expect(softwareServiceSchema['@type']).toBe('Service');
+    expect(softwareServiceSchema.additionalType).toBe(
+      'https://schema.org/ProfessionalService',
+    );
+  });
+
+  it('does not replace the LocalBusiness schema', () => {
+    expect(schemaOrg['@type']).toBe('LocalBusiness');
+    expect(softwareServiceSchema['@type']).not.toBe('LocalBusiness');
+  });
+
+  it('is provided by TecniCopa', () => {
+    expect(softwareServiceSchema.provider['@type']).toBe('LocalBusiness');
+    expect(softwareServiceSchema.provider.name).toBe('TecniCopa');
+    expect(softwareServiceSchema.provider.url).toBe('https://tecnicopa.com');
+  });
+
+  it('serves Colombia', () => {
+    expect(softwareServiceSchema.areaServed['@type']).toBe('Country');
+    expect(softwareServiceSchema.areaServed.name).toBe('Colombia');
+  });
+
+  it('points to the software page', () => {
+    expect(softwareServiceSchema.url).toBe('https://tecnicopa.com/software');
+    expect(softwareServiceSchema.name.length).toBeGreaterThan(0);
+    expect(softwareServiceSchema.description.length).toBeGreaterThan(0);
+    expect(softwareServiceSchema.serviceType.length).toBeGreaterThan(0);
   });
 });

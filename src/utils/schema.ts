@@ -29,3 +29,23 @@ export const schemaOrg = {
     name: 'Santiago Molano',
   },
 };
+
+export const softwareServiceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  additionalType: 'https://schema.org/ProfessionalService',
+  name: 'Desarrollo de software a la medida y automatización de procesos',
+  description:
+    'Software a la medida y automatización de procesos para empresas en toda Colombia.',
+  url: 'https://tecnicopa.com/software',
+  serviceType: 'Desarrollo de software a la medida y automatización de procesos',
+  provider: {
+    '@type': 'LocalBusiness',
+    name: 'TecniCopa',
+    url: 'https://tecnicopa.com',
+  },
+  areaServed: {
+    '@type': 'Country',
+    name: 'Colombia',
+  },
+};

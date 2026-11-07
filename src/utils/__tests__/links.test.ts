@@ -1,5 +1,27 @@
 import { describe, it, expect } from 'vitest';
-import { WHATSAPP_URL, INSTAGRAM_URL, FACEBOOK_URL, EMAIL, PHONE } from '../links';
+import {
+  buildWhatsAppUrl,
+  WHATSAPP_URL,
+  WHATSAPP_SOFTWARE_URL,
+  INSTAGRAM_URL,
+  FACEBOOK_URL,
+  EMAIL,
+  PHONE,
+} from '../links';
+
+describe('buildWhatsAppUrl', () => {
+  it('points to wa.me with the business phone and encoded message', () => {
+    const url = buildWhatsAppUrl('Hola, prueba');
+    expect(url).toMatch(/^https:\/\/wa\.me\/573243638746\?text=/);
+    expect(url).toContain(encodeURIComponent('Hola, prueba'));
+  });
+
+  it('encodes spaces and punctuation', () => {
+    expect(buildWhatsAppUrl('Hola, mundo')).toBe(
+      'https://wa.me/573243638746?text=Hola%2C%20mundo',
+    );
+  });
+});
 
 describe('WHATSAPP_URL', () => {
   it('points to wa.me', () => {
@@ -10,8 +32,27 @@ describe('WHATSAPP_URL', () => {
     expect(WHATSAPP_URL).toContain('573243638746');
   });
 
-  it('includes a pre-filled message', () => {
+  it('includes a pre-filled scheduling message', () => {
     expect(WHATSAPP_URL).toContain('text=');
+    expect(WHATSAPP_URL).toBe(
+      'https://wa.me/573243638746?text=Hola%2C%20quiero%20agendar%20un%20servicio',
+    );
+  });
+});
+
+describe('WHATSAPP_SOFTWARE_URL', () => {
+  it('uses the same phone number as the support WhatsApp link', () => {
+    expect(WHATSAPP_SOFTWARE_URL).toContain('573243638746');
+  });
+
+  it('includes a pre-filled software quote message', () => {
+    expect(WHATSAPP_SOFTWARE_URL).toBe(
+      'https://wa.me/573243638746?text=Hola%2C%20quiero%20cotizar%20un%20desarrollo%20de%20software',
+    );
+  });
+
+  it('does not replace the existing support WhatsApp URL', () => {
+    expect(WHATSAPP_SOFTWARE_URL).not.toBe(WHATSAPP_URL);
   });
 });
 
