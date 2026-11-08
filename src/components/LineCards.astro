@@ -1,0 +1,22 @@
+---
+import type { LineCard } from '../utils/content';
+import CtaButton from './CtaButton.astro';
+
+interface Props {
+  lines: LineCard[];
+}
+
+const { lines } = Astro.props;
+---
+
+<div class="grid md:grid-cols-2 gap-6 reveal-cascade">
+  {
+    lines.map((line) => (
+      <article class="reveal flex flex-col gap-4 p-8 rounded-2xl border border-tecni-lilac/40 min-h-56">
+        <h2 class="text-2xl font-bold">{line.title}</h2>
+        <p class="text-tecni-dark/60 flex-1">{line.subtitle}</p>
+        <CtaButton href={line.href}>{line.cta}</CtaButton>
+      </article>
+    ))
+  }
+</div>

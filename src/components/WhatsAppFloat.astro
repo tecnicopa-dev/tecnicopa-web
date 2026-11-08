@@ -1,11 +1,15 @@
 ---
 import { WHATSAPP_URL } from '../utils/links';
 
-const whatsappLink = WHATSAPP_URL;
+interface Props {
+  href?: string;
+}
+
+const { href = WHATSAPP_URL } = Astro.props;
 ---
 
 <a
-  href={whatsappLink}
+  href={href}
   target="_blank"
   rel="noopener noreferrer"
   class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#25D366] text-white font-medium px-4 py-3 rounded-full shadow-lg hover:bg-[#1ebe59] transition-all hover:scale-105 active:scale-95"

@@ -12,7 +12,7 @@ Checks de seguridad adicionales:
 6. `grep -rn "target=\"_blank\"" src/ --include="*.astro" -A1 | grep -v "noopener"` — links sin noopener (resultado vacío = OK)
 7. `grep -rn "set:html" src/` — verificar que solo se usa con datos estáticos
 8. `grep -rn "import\.meta\.env\|VITE_" src/` — vars de entorno expuestas
-9. `cat vercel.json` — confirmar que los headers de seguridad están presentes
+9. `cat public/_headers` — confirmar que los headers de seguridad están presentes
 
 Formato del reporte final:
 ```
@@ -27,7 +27,7 @@ SEGURIDAD:
 ✅ Links       — todos con noopener noreferrer
 ✅ set:html    — solo con datos estáticos (src/utils/)
 ✅ Env vars    — ninguna expuesta en bundle
-✅ Headers     — vercel.json con CSP, X-Frame-Options, etc.
+✅ Headers     — public/_headers con CSP, X-Frame-Options, etc.
 ```
 
 Si algo falla, mostrar el error exacto y qué hay que corregir antes de poder hacer /ship.

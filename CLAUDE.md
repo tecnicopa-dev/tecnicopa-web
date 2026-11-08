@@ -16,7 +16,7 @@ Para cualquier cambio:
 2. Implementar con los agentes especializados
 3. `/check` — seguridad + lint + types + tests + build
 4. `/ship` — audit → commit → push → PR a `develop`
-5. Para ir a producción: PR de `develop` → `main` → Vercel auto-deploya
+5. Para ir a producción: PR de `develop` → `main`
 
 **Hotfix urgente**: `/hotfix <nombre>` (parte de `main`, PR a `main` y `develop`).
 
@@ -45,15 +45,17 @@ Para cualquier cambio:
 Definidos en `.mcp.json` (raíz del proyecto). Tras clonar y abrir el proyecto en Claude Code, autentícalos con OAuth desde el comando `/mcp` (no requieren tokens manuales).
 
 - **GitHub** (servidor remoto oficial, `https://api.githubcopilot.com/mcp/`): PRs, branches, issues, CI. Login OAuth al conectar.
-- **Vercel** (servidor remoto oficial, `https://mcp.vercel.com`): proyectos, deploys y logs. Login OAuth al conectar.
-
-El auto-deploy se mantiene vía GitHub → Vercel (push `main` = producción, push `feature/*` = preview).
 
 ---
 
 ## Descripción del proyecto
 
-**TecniCopa** es el sitio web de una empresa de soporte técnico de computadores a domicilio ubicada en Copacabana, Antioquia, Colombia. Es una landing page informativa cuyo **objetivo principal es convertir visitantes en clientes que escriban por WhatsApp**.
+**TecniCopa** es el sitio web de una empresa en Copacabana, Antioquia, Colombia, con **dos líneas al mismo nivel**:
+
+1. **Soporte técnico** de computadores a domicilio (lo realiza un técnico aliado; TecniCopa coordina, garantiza y hace el seguimiento).
+2. **Software a la medida y automatización** de procesos para empresas en Colombia (lo desarrolla el fundador).
+
+No hay equipo interno. El **objetivo principal** es convertir visitantes en clientes que escriban por WhatsApp.
 
 El sitio debe transmitir confianza, profesionalismo y cercanía — sin jerga técnica innecesaria.
 
@@ -63,12 +65,17 @@ El sitio debe transmitir confianza, profesionalismo y cercanía — sin jerga t�
 
 | Tecnología | Versión | Notas |
 |---|---|---|
-| Astro | ^6.1.5 | Framework principal |
+| Node.js | >= 22.23.4 | `engines` en `package.json` |
+| Astro | ^7.4.7 | Framework principal |
 | TypeScript | strict | `astro/tsconfigs/strict` en tsconfig.json |
 | Tailwind CSS | ^4.2.2 | Vía `@tailwindcss/vite` — sin tailwind.config.js |
+| Vitest | ^5.1.0 | Tests de `src/utils/` con cobertura 100% |
 | @astrojs/sitemap | latest | Genera sitemap automático |
 | ESLint | latest | Con `eslint-plugin-astro` y soporte TypeScript |
 | Prettier | latest | Con `prettier-plugin-astro` |
+| Wrangler | ^4.158.0 | Cloudflare Workers (static assets, `wrangler.jsonc`) |
+
+Overrides de seguridad en `package.json`: `glob` ^14.0.4 y `minimatch` ^11.0.5 (además de `path-to-regexp` y `yaml`).
 
 ---
 
@@ -77,35 +84,64 @@ El sitio debe transmitir confianza, profesionalismo y cercanía — sin jerga t�
 ```
 tecnicopa-web/
 ├── public/
-│   ├── favicon.ico          # Favicon actual (reemplazar con uno de marca)
-│   ├── favicon.svg          # SVG favicon
-│   ├── logo.png             # Logo actual (convertir a .webp para producción)
-│   └── robots.txt           # Directivas para crawlers
+│   ├── favicon.ico
+│   ├── favicon.svg
+│   ├── logo.png
+│   ├── founder/santiago-molano.jpg   # URL estable para Schema.org Person
+│   ├── _headers                      # Seguridad y caché (Cloudflare)
+│   └── robots.txt
 ├── src/
+│   ├── assets/
+│   │   └── founder/santiago-molano.jpg  # Fuente para astro:assets (avif/webp)
 │   ├── components/
-│   │   ├── Header.astro     # Navegación fija — NO modificar sin necesidad
-│   │   ├── Hero.astro       # Sección principal — NO modificar sin necesidad
-│   │   ├── Services.astro   # id="servicios"
-│   │   ├── WhyUs.astro      # id="por-que"
-│   │   ├── Pricing.astro    # id="precios"
-│   │   ├── About.astro      # id="nosotros"
-│   │   ├── Testimonials.astro # id="testimonios"
-│   │   ├── Contact.astro    # id="contacto"
-│   │   ├── Footer.astro     # Pie de página
-│   │   ├── SEO.astro        # Componente SEO reutilizable (usado en Layout)
-│   │   └── WhatsAppFloat.astro # Botón flotante WhatsApp (siempre visible)
+│   │   ├── Header.astro
+│   │   ├── Footer.astro
+│   │   ├── SEO.astro
+│   │   ├── WhatsAppFloat.astro
+│   │   ├── CtaButton.astro
+│   │   ├── Section.astro
+│   │   ├── PageHero.astro
+│   │   ├── ServiceGrid.astro
+│   │   ├── ProcessSteps.astro
+│   │   ├── PricingTable.astro
+│   │   ├── PricingTabs.astro
+│   │   ├── FounderCard.astro
+│   │   ├── Faq.astro
+│   │   ├── TrustBar.astro
+│   │   ├── LineCards.astro
+│   │   └── FinalCta.astro
 │   ├── layouts/
-│   │   └── Layout.astro     # Layout base con SEO, Schema.org, fonts
+│   │   └── Layout.astro
 │   ├── pages/
-│   │   └── index.astro      # Página principal
-│   └── styles/
-│       └── global.css       # @import tailwindcss + @theme con colores de marca
-├── astro.config.mjs         # Config de Astro (sitemap, vite+tailwind)
-├── tsconfig.json            # TypeScript strict
-├── eslint.config.js         # ESLint con plugin Astro y TypeScript
-├── .prettierrc              # Prettier con plugin Astro
-└── CLAUDE.md                # Este archivo
+│   │   ├── index.astro              # Hub: las dos líneas al mismo nivel
+│   │   ├── soporte-tecnico.astro
+│   │   ├── software.astro
+│   │   └── 404.astro
+│   ├── styles/
+│   │   └── global.css
+│   └── utils/
+│       ├── content.ts               # TODO el texto visible
+│       ├── links.ts
+│       ├── schema.ts
+│       ├── seo.ts
+│       └── date.ts
+├── astro.config.mjs
+├── wrangler.jsonc                   # Cloudflare Workers (static assets)
+├── tsconfig.json
+├── eslint.config.js
+├── vitest.config.ts
+├── .prettierrc
+└── CLAUDE.md
 ```
+
+### Rutas
+
+| Ruta | Página |
+|---|---|
+| `/` | Hub: soporte y software al mismo nivel |
+| `/soporte-tecnico` | Servicios, precios y cobertura de soporte |
+| `/software` | Software a la medida, automatización y precios |
+| `404` | Página no encontrada (CTA al inicio) |
 
 ---
 
@@ -120,6 +156,12 @@ tecnicopa-web/
 - **Nunca** usar emojis en código — solo en contenido visible si aplica al diseño
 - **Código sin comentarios innecesarios ni de relleno.** Solo comentar lo estrictamente no obvio (workarounds, decisiones no evidentes, el porqué). El código debe ser autoexplicativo mediante nombres claros; no narrar en comentarios lo que el código ya dice.
 
+### Contenido
+- **Todo el texto visible vive en `src/utils/content.ts`.** Los componentes no inventan copy inline.
+- **No inventar testimonios, clientes ni cifras.** Si no hay testimonios reales, no hay sección de testimonios.
+- **No publicar datos del técnico aliado** (nombre, tarifas internas, comisiones, contacto personal).
+- WhatsApp y URLs públicas viven en `src/utils/links.ts`. Schema.org en `src/utils/schema.ts`.
+
 ### Tailwind CSS v4
 - **NO crear** `tailwind.config.js` ni `tailwind.config.mjs` — Tailwind v4 no los usa
 - Los tokens de diseño se definen en `src/styles/global.css` bajo `@theme`
@@ -133,9 +175,12 @@ tecnicopa-web/
 - Navegación por teclado funcional
 
 ### Imágenes
-- Logo y fotos: convertir a `.webp` para producción (mejor rendimiento)
+- Fotos de contenido: `src/assets/` + `<Image />` o `<Picture />` de `astro:assets` (avif/webp, `widths` 1x/2x)
 - `loading="lazy"` en imágenes que no estén above the fold
 - Imágenes above the fold: no agregar `loading="lazy"` (evitar LCP penalizado)
+- Ancho y alto explícitos para evitar layout shift
+- Quitar EXIF (GPS, cámara, fecha) antes de commitear fotos
+- CSP `img-src 'self'`: no cargar imágenes de dominios externos
 
 ---
 
@@ -163,9 +208,8 @@ Definidos en `src/styles/global.css`:
 
 ## Tipografía
 
-- **Familia**: Inter (Google Fonts)
+- **Familia**: Inter (self-hosted via `@fontsource/inter`)
 - **Pesos cargados**: 400 (Regular), 500 (Medium), 700 (Bold)
-- **Carga**: `display=swap` con `preconnect` en el Layout
 - Títulos: `font-bold` (700)
 - Contenido y UI: `font-normal` (400) o `font-medium` (500)
 
@@ -178,29 +222,43 @@ Definidos en `src/styles/global.css`:
 - **Voz**: Cercana pero profesional. Directa. Sin jerga corporativa.
   - Correcto: "¿Tu computador no enciende? Escríbenos y lo diagnosticamos gratis."
   - Incorrecto: "Implementamos soluciones tecnológicas de vanguardia para su empresa."
-- **WhatsApp (CTA principal)**: `https://wa.me/573243638746?text=Hola%2C%20quiero%20agendar%20un%20servicio`
+- **WhatsApp (CTA principal)**: construir con `buildWhatsAppUrl` en `src/utils/links.ts` (`wa.me/573243638746`)
 - **Instagram**: @tecnicopa — `https://instagram.com/tecnicopa`
 - **Correo**: contacto@tecnicopa.com
 - **Ubicación**: Copacabana, Antioquia, Colombia
+- **Fundador**: Santiago Molano (foto en `src/assets/founder/`, schema `Person` con `image`)
 
 ---
 
-## Servicios (Fase 1)
+## Líneas de servicio
 
+### Soporte técnico
 1. Mantenimiento preventivo y correctivo
 2. Formateo e instalación de sistema operativo
 3. Eliminación de virus y malware
 4. Soporte remoto
 
+Lo realiza un técnico aliado. TecniCopa coordina, da garantía escrita y hace seguimiento.
+
+### Software y automatización
+1. Software a la medida
+2. Automatización de procesos
+3. Integraciones e inteligencia artificial
+4. Sitios web para empresas
+5. Consultoría técnica
+6. Soporte mensual de software
+
+Lo desarrolla el fundador, de forma remota, para empresas en toda Colombia.
+
 ---
 
 ## Diferenciadores clave
 
-- Garantía escrita en todos los servicios
-- Factura electrónica
-- Seguimiento post-servicio (llamada o mensaje a los 7 días)
-- Identidad visual profesional
-- Contenido educativo gratuito
+- Garantía escrita en todos los servicios de soporte
+- Comprobante de pago
+- Seguimiento post-servicio (a los 7 días en soporte)
+- Trato directo con quien coordina o desarrolla
+- Diagnóstico de software sin costo (30 minutos)
 
 ---
 
@@ -208,12 +266,12 @@ Definidos en `src/styles/global.css`:
 
 ### Reglas generales
 - `lang="es"` en el `<html>` siempre
-- Title format: `[Página] | TecniCopa — Soporte Técnico en Copacabana`
+- Title format: `[Página] | TecniCopa — …` (el copy exacto vive en `content.ts`)
 - Meta description única por página, entre 150-160 caracteres
 - Canonical URL en todas las páginas
 - Open Graph completo (og:title, og:description, og:image, og:url, og:type, og:locale=es_CO)
 - Twitter card: `summary_large_image`
-- Schema.org `LocalBusiness` en JSON-LD en el Layout (ya configurado)
+- Schema.org `LocalBusiness` + `Person` (founder) en `src/utils/schema.ts`; `Service`/`ProfessionalService` en `/software`
 
 ### Schema.org LocalBusiness
 ```json
@@ -224,7 +282,11 @@ Definidos en `src/styles/global.css`:
   "url": "https://tecnicopa.com",
   "areaServed": ["Copacabana", "Girardota", "Bello"],
   "priceRange": "$",
-  "sameAs": ["https://instagram.com/tecnicopa"]
+  "founder": {
+    "@type": "Person",
+    "name": "Santiago Molano",
+    "image": "https://tecnicopa.com/founder/santiago-molano.jpg"
+  }
 }
 ```
 
@@ -237,27 +299,35 @@ Definidos en `src/styles/global.css`:
 ## Comandos del proyecto
 
 ```bash
-npm run dev        # Servidor de desarrollo en localhost:4321
-npm run build      # Build de producción (verifica errores TypeScript y Astro)
-npm run preview    # Preview del build de producción
-npm run check      # Verificación de tipos Astro + TypeScript
-npm run lint       # Linting con ESLint
-npm run format     # Formateo con Prettier
+npm run dev            # Servidor de desarrollo en localhost:4321
+npm run build          # Build de producción (verifica errores TypeScript y Astro)
+npm run preview        # Preview del build de producción (Astro)
+npm run preview:cf     # build + wrangler dev (Cloudflare local)
+npm run deploy         # build + wrangler deploy
+npm run check          # Verificación de tipos Astro + TypeScript
+npm run lint           # Linting con ESLint
+npm run format         # Formateo con Prettier
+npm test               # Vitest
+npm run test:coverage  # Vitest + cobertura 100% en src/utils
 ```
 
 ---
 
 ## Deploy
 
-- **Plataforma**: Vercel (deploy automático)
-- **Flujo**: push a `main` → Vercel detecta cambio → build automático → deploy
-- **Dominio**: tecnicopa.com (DNS en Cloudflare apuntando a Vercel)
+- **Plataforma**: Cloudflare Workers (static assets)
+- **CI**: Workers Builds conectado a GitHub (`tecnicopa-dev/tecnicopa-web`)
+- **Flujo**: push a `main` → producción; otras ramas → URLs de preview
+- **Dominio**: tecnicopa.com (DNS en Cloudflare)
+- **Headers**: `public/_headers` (seguridad + caché `immutable` de `/_astro/*`)
+- **www**: redirección `www.tecnicopa.com` → `tecnicopa.com` con una regla de Cloudflare (no en `_redirects`)
 - **Variable de entorno**: no se requieren variables de entorno para el sitio base
 
 Antes de hacer push a `main`, verificar:
 1. `npm run build` pasa sin errores
 2. `npm run check` pasa sin errores de tipos
-3. El sitio se ve bien en mobile y desktop
+3. `npm audit --audit-level=high` → 0 HIGH/CRITICAL
+4. El sitio se ve bien en mobile y desktop
 
 ---
 
@@ -266,6 +336,8 @@ Antes de hacer push a `main`, verificar:
 - NO crear `tailwind.config.js` o `tailwind.config.mjs`
 - NO usar React para componentes estáticos (Astro es suficiente)
 - NO agregar emojis en el código fuente (solo en contenido visible si el diseño lo requiere)
-- NO modificar `Header.astro` y `Hero.astro` sin necesidad urgente
 - NO hardcodear colores hex — usar siempre las clases de marca de Tailwind
 - NO olvidar `alt` en imágenes ni `aria-label` en botones con solo iconos
+- NO inventar testimonios, clientes, cifras ni datos del técnico aliado
+- NO poner copy fuera de `src/utils/content.ts`
+- NO commitear fotos con metadatos EXIF

@@ -1,0 +1,28 @@
+---
+import type { ServiceItem } from '../utils/content';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  services: ServiceItem[];
+}
+
+const { title, subtitle, services } = Astro.props;
+---
+
+<div>
+  <div class="max-w-2xl mb-12 reveal">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
+    {subtitle && <p class="text-tecni-dark/60">{subtitle}</p>}
+  </div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal-cascade">
+    {
+      services.map((service) => (
+        <article class="reveal p-6 rounded-2xl border border-tecni-lilac/40">
+          <h3 class="font-bold text-lg mb-2">{service.title}</h3>
+          <p class="text-sm text-tecni-dark/60 leading-relaxed">{service.description}</p>
+        </article>
+      ))
+    }
+  </div>
+</div>

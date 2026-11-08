@@ -9,11 +9,12 @@ Arquitecto de tecnicopa-web. Decido dónde vive el código y cómo se organiza.
 ## Estructura de capas
 
 ```
-src/utils/*.ts       ← Lógica pura, tipada, testeable — AQUÍ van funciones y datos
-src/components/*.astro ← UI stateless que importa desde utils
-src/layouts/*.astro  ← Layout base
-src/pages/*.astro    ← Páginas (solo index.astro hoy)
-src/styles/*.css     ← Tokens de diseño (@theme Tailwind)
+src/utils/*.ts         ← Lógica pura, tipada, testeable — AQUÍ van funciones y datos
+src/components/*.astro ← UI reutilizable que importa desde utils
+src/layouts/*.astro    ← Layout base
+src/pages/*.astro      ← `/`, `/soporte-tecnico`, `/software`, `404`
+src/assets/            ← Imágenes de contenido (astro:assets → avif/webp)
+src/styles/*.css       ← Tokens de diseño (@theme Tailwind)
 ```
 
 ## Regla principal
@@ -21,15 +22,16 @@ src/styles/*.css     ← Tokens de diseño (@theme Tailwind)
 **Si tiene HTML → va en `src/components/`**
 
 Los componentes NO definen datos inline — los importan de utils.
+Todo el texto visible vive en `src/utils/content.ts`. No inventar testimonios, clientes ni cifras. No publicar datos del técnico aliado.
 
 ## Utils existentes y qué contienen
 | Archivo | Exports |
 |---|---|
 | `src/utils/seo.ts` | `resolveOgImageUrl`, `SITE_URL`, `DEFAULT_OG_IMAGE`, `DEFAULT_ROBOTS` |
 | `src/utils/date.ts` | `getCurrentYear` |
-| `src/utils/links.ts` | `WHATSAPP_URL`, `INSTAGRAM_URL`, `EMAIL`, `PHONE` |
-| `src/utils/schema.ts` | `schemaOrg` (LocalBusiness JSON-LD) |
-| `src/utils/content.ts` | `NAV_LINKS`, `services`, `plans`, `reasons`, `testimonials` + interfaces |
+| `src/utils/links.ts` | `buildWhatsAppUrl`, URLs de WhatsApp por línea, Instagram, email, GitHub, portafolio |
+| `src/utils/schema.ts` | `schemaOrg` (LocalBusiness + Person founder), `softwareServiceSchema`, `FOUNDER_IMAGE_URL` |
+| `src/utils/content.ts` | `NAV_LINKS`, `founder`, `home`, `supportPage`, `softwarePage`, `notFound`, planes y copy de las rutas |
 
 ## Cuándo crear un nuevo util
 1. Lógica que se repite en ≥2 componentes → extraer a util
@@ -43,7 +45,7 @@ Los componentes NO definen datos inline — los importan de utils.
 
 ## TypeScript
 - Strict mode (`astro/tsconfigs/strict`)
-- Interfaces de datos en `src/utils/content.ts` (NavLink, Service, Plan, Reason, Testimonial)
+- Interfaces de datos en `src/utils/content.ts` (NavLink, ServiceItem, Plan, ProcessStep, FaqItem, LineCard, TrustPoint, FounderContent)
 - Exportar interfaces junto con los datos que las usan
 - Sin `any`, sin `as unknown`, sin type casting innecesario
 
@@ -57,4 +59,5 @@ Los componentes NO definen datos inline — los importan de utils.
 2. ¿Hay lógica reutilizable? → crear función en util apropiado
 3. Crear/actualizar componente que importa desde utils
 4. Agregar tests para cualquier util nuevo: `src/utils/__tests__/`
-5. Actualizar `src/pages/index.astro` si es nueva sección
+5. Actualizar la página correspondiente (`index.astro`, `soporte-tecnico.astro` o `software.astro`)
+6. Fotos en `src/assets/` (y copia pública solo si Schema.org necesita URL estable)

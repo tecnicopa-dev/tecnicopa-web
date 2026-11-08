@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import ServiceGrid from '../components/ServiceGrid.astro';
+import PricingTable from '../components/PricingTable.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { supportPage, supportPlans } from '../utils/content';
+import { WHATSAPP_SUPPORT_URL } from '../utils/links';
+---
+
+<Layout title={supportPage.seo.title} description={supportPage.seo.description}>
+  <Header />
+  <main>
+    <PageHero content={supportPage.hero} primaryHref={WHATSAPP_SUPPORT_URL} />
+
+    <Section id="servicios">
+      <ServiceGrid
+        title={supportPage.servicesTitle}
+        subtitle={supportPage.servicesSubtitle}
+        services={supportPage.services}
+      />
+      <div class="mt-12 reveal">
+        <p class="text-sm font-medium text-tecni-dark/70 mb-4">{supportPage.extraTitle}</p>
+        <ul class="flex flex-wrap gap-2">
+          {
+            supportPage.extras.map((item) => (
+              <li class="text-xs font-medium bg-tecni-lavender text-tecni-purple px-3 py-1.5 rounded-full">
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </Section>
+
+    <Section id="por-que" tone="lavender">
+      <ServiceGrid title={supportPage.reasonsTitle} services={supportPage.reasons} />
+    </Section>
+
+    <Section id="precios">
+      <div class="mb-10 reveal">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">{supportPage.pricingTitle}</h2>
+        <p class="text-tecni-dark/60">{supportPage.pricingSubtitle}</p>
+      </div>
+      <PricingTable plans={supportPlans} />
+      <p class="mt-10 text-sm text-tecni-dark/60 reveal">
+        <span class="font-medium text-tecni-dark">{supportPage.coverageTitle}:</span>
+        {supportPage.coverage}
+      </p>
+    </Section>
+
+    <Section tone="dark">
+      <FinalCta
+        title={supportPage.ctaTitle}
+        subtitle={supportPage.ctaSubtitle}
+        primaryLabel={supportPage.ctaLabel}
+        primaryHref={WHATSAPP_SUPPORT_URL}
+      />
+    </Section>
+  </main>
+  <Footer />
+  <WhatsAppFloat href={WHATSAPP_SUPPORT_URL} />
+</Layout>

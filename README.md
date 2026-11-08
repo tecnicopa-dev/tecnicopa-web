@@ -16,7 +16,7 @@ Objetivo principal del sitio: convertir visitantes en clientes que escriban por 
 - Astro 6 (sitio estatico)
 - TypeScript en modo strict
 - Tailwind CSS v4 via @tailwindcss/vite
-- Adapter de Vercel para despliegue
+- Cloudflare Workers (static assets) para despliegue
 - @astrojs/sitemap para sitemap automatico
 - Vitest con cobertura al 100% en utilidades
 - ESLint + Prettier + Husky + Commitlint
@@ -47,12 +47,15 @@ Servidor local por defecto: http://localhost:4321
 | `npm run format` | Formatea con Prettier |
 | `npm run test` | Ejecuta pruebas con Vitest |
 | `npm run test:coverage` | Ejecuta pruebas y reporte de cobertura |
+| `npm run preview:cf` | Build + `wrangler dev` (Cloudflare local) |
+| `npm run deploy` | Build + `wrangler deploy` |
 
 ## Estructura del proyecto
 
 ```text
 tecnicopa-web/
 ├── public/
+│   ├── _headers
 │   └── robots.txt
 ├── src/
 │   ├── components/
@@ -83,7 +86,7 @@ tecnicopa-web/
 ├── astro.config.mjs
 ├── eslint.config.js
 ├── vitest.config.ts
-├── vercel.json
+├── wrangler.jsonc
 └── package.json
 ```
 
@@ -102,11 +105,11 @@ tecnicopa-web/
 - JSON-LD LocalBusiness desde `src/utils/schema.ts`.
 - Sitemap automatico via `@astrojs/sitemap`.
 - `robots.txt` con referencia a sitemap.
-- Integracion de Vercel Analytics y Speed Insights en la pagina principal.
+- CSP lista para Cloudflare Web Analytics (beacon inyectado por el panel de Cloudflare).
 
 ## Seguridad
 
-`vercel.json` define headers de seguridad para todas las rutas, incluyendo:
+`public/_headers` define headers de seguridad para todas las rutas, incluyendo:
 
 - Content-Security-Policy
 - X-Frame-Options
@@ -147,9 +150,11 @@ Evitar commits directos en `main` y `develop`; trabajar con PRs.
 
 ## Deploy
 
-- Plataforma: Vercel
-- Push a `main`: despliegue a produccion
-- Push a ramas feature: preview deploy
+- Plataforma: Cloudflare Workers (static assets)
+- Workers Builds conectado a GitHub (`tecnicopa-dev/tecnicopa-web`)
+- Push a `main`: produccion
+- Otras ramas: URLs de preview
+- Headers: `public/_headers`
 
 ## Checklist recomendado antes de PR
 

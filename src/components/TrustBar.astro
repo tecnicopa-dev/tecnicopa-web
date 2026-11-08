@@ -1,0 +1,20 @@
+---
+import type { TrustPoint } from '../utils/content';
+
+interface Props {
+  points: TrustPoint[];
+}
+
+const { points } = Astro.props;
+---
+
+<div class="grid sm:grid-cols-3 gap-8 reveal-cascade">
+  {
+    points.map((point) => (
+      <div class="reveal">
+        <p class="font-bold mb-1">{point.title}</p>
+        <p class="text-sm text-tecni-dark/60">{point.description}</p>
+      </div>
+    ))
+  }
+</div>

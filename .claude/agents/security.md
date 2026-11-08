@@ -7,11 +7,14 @@ description: Use this agent for ANY security concern: dependency vulnerabilities
 Guardián de seguridad de tecnicopa-web. Repositorio PÚBLICO — zero tolerancia a vulnerabilidades en producción.
 
 ## Contexto del stack (importante para evaluar riesgo real)
-- **Sitio estático** generado por Astro 6 → no hay servidor, no hay base de datos, no hay sesiones
+- **Sitio estático** generado por Astro 7 → no hay servidor, no hay base de datos, no hay sesiones
+- **Node**: >= 22.23.4
 - **Sin formularios** que procesen datos server-side
 - **Sin autenticación** ni tokens de usuario
-- **Deploy**: Vercel (HTTPS forzado, edge network)
+- **Deploy**: Cloudflare Workers (static assets). Workers Builds: `main` = producción, otras ramas = preview. Headers en `public/_headers`.
 - **Riesgo de XSS**: bajo por arquitectura — Astro escapa HTML por defecto en templates `{variable}`
+- **CSP `img-src 'self'`**: fotos (fundador, logo) se sirven del propio dominio; no cambiar CSP para CDNs externos
+- **Overrides** de `glob` ^14.0.4 y `minimatch` ^11.0.5 en `package.json`
 
 ## Checklist de seguridad (ejecutar SIEMPRE antes de /ship)
 
@@ -53,9 +56,9 @@ grep -rn "token\|password\|secret\|api_key\|apikey\|private" src/ -i --include="
 - El teléfono/email de contacto en `src/utils/links.ts` son datos públicos ✓
 - Cualquier otra credencial → ERROR CRÍTICO, no hacer commit
 
-### 6. Headers HTTP — verificar `vercel.json`
+### 6. Headers HTTP — verificar `public/_headers`
 ```bash
-cat vercel.json
+cat public/_headers
 ```
 Headers requeridos (ya configurados):
 - `Content-Security-Policy` — controla qué recursos puede cargar el navegador
@@ -64,6 +67,7 @@ Headers requeridos (ya configurados):
 - `X-XSS-Protection: 1; mode=block` — filtro XSS legacy
 - `Referrer-Policy: strict-origin-when-cross-origin`
 - `Permissions-Policy` — deshabilita camera, mic, geolocation, payment
+- `Cache-Control: public, max-age=31536000, immutable` en `/_astro/*`
 
 ### 7. `.gitignore` — archivos sensibles excluidos
 ```bash
@@ -71,16 +75,20 @@ grep -E "\.env|\.key|\.pem|secret|credential" .gitignore
 ```
 Debe incluir `.env` y `.env.production`.
 
-## CSP actual (vercel.json) — justificación
+## CSP actual (`public/_headers`) — justificación
 
 ```
 default-src 'none'
-script-src 'self' 'unsafe-inline'    ← necesario para el módulo inline del menú móvil y JSON-LD
-style-src 'self' https://fonts.googleapis.com
-font-src 'self' https://fonts.gstatic.com
+script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com
+                                     ← unsafe-inline: menú móvil y JSON-LD
+                                     ← static.cloudflareinsights.com: Web Analytics
+style-src 'self'                     ← Tailwind + Inter self-hosted
+font-src 'self'                      ← @fontsource/inter
 img-src 'self'
-connect-src 'self'
-frame-ancestors 'none'               ← previene clickjacking (mejor que X-Frame-Options en browsers modernos)
+connect-src 'self' https://cloudflareinsights.com
+                                     ← cloudflareinsights.com: beacon de Web Analytics
+frame-ancestors 'none'               ← previene clickjacking
+base-uri 'self'
 form-action 'none'                   ← no hay formularios
 upgrade-insecure-requests
 ```
@@ -116,6 +124,6 @@ SEGURIDAD:
 ✅ set:html → solo con datos estáticos de src/utils/
 ✅ Env vars → ninguna expuesta
 ✅ Secrets → ninguno hardcodeado
-✅ HTTP headers → vercel.json configurado
+✅ HTTP headers → public/_headers configurado
 ✅ .gitignore → .env excluido
 ```
