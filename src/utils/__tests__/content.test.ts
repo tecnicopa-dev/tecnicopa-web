@@ -10,6 +10,7 @@ import {
   homeSupportPlans,
   homeSoftwarePlans,
   softwarePriceNote,
+  notFound,
 } from '../content';
 
 describe('NAV_LINKS', () => {
@@ -120,5 +121,14 @@ describe('home plan subsets', () => {
   it('shows three main plans per line on the home', () => {
     expect(homeSupportPlans).toHaveLength(3);
     expect(homeSoftwarePlans).toHaveLength(3);
+  });
+});
+
+describe('notFound', () => {
+  it('has title, description and a CTA back to inicio', () => {
+    expect(notFound.seo.title.length).toBeGreaterThan(0);
+    expect(notFound.seo.title).toContain('TecniCopa');
+    expect(notFound.seo.description.length).toBeGreaterThan(0);
+    expect(notFound.ctaLabel.toLowerCase()).toMatch(/inicio/);
   });
 });

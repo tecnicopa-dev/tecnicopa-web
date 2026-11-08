@@ -460,3 +460,14 @@ export const softwarePlans: Plan[] = [
 
 export const homeSupportPlans = supportPlans.filter((plan) => plan.showOnHome);
 export const homeSoftwarePlans = softwarePlans.filter((plan) => plan.showOnHome);
+
+export const notFound = {
+  seo: {
+    title: 'Página no encontrada | TecniCopa',
+    description:
+      'Esta página no existe o el enlace está desactualizado. Vuelve al inicio de TecniCopa para ver soporte técnico y software.',
+  } satisfies SeoContent,
+  heading: 'Esta página no existe',
+  body: 'El enlace puede estar desactualizado o mal escrito. Vuelve al inicio y encuentra lo que buscas.',
+  ctaLabel: 'Volver al inicio',
+};
