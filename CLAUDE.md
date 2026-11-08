@@ -45,7 +45,6 @@ Para cualquier cambio:
 Definidos en `.mcp.json` (raíz del proyecto). Tras clonar y abrir el proyecto en Claude Code, autentícalos con OAuth desde el comando `/mcp` (no requieren tokens manuales).
 
 - **GitHub** (servidor remoto oficial, `https://api.githubcopilot.com/mcp/`): PRs, branches, issues, CI. Login OAuth al conectar.
-- **Vercel** (servidor remoto oficial, `https://mcp.vercel.com`): proyectos, deploys y logs. Login OAuth al conectar.
 
 ---
 
@@ -74,6 +73,7 @@ El sitio debe transmitir confianza, profesionalismo y cercanía — sin jerga t�
 | @astrojs/sitemap | latest | Genera sitemap automático |
 | ESLint | latest | Con `eslint-plugin-astro` y soporte TypeScript |
 | Prettier | latest | Con `prettier-plugin-astro` |
+| Wrangler | ^4.158.0 | Cloudflare Workers (static assets, `wrangler.jsonc`) |
 
 Overrides de seguridad en `package.json`: `glob` ^14.0.4 y `minimatch` ^11.0.5 (además de `path-to-regexp` y `yaml`).
 
@@ -88,6 +88,7 @@ tecnicopa-web/
 │   ├── favicon.svg
 │   ├── logo.png
 │   ├── founder/santiago-molano.jpg   # URL estable para Schema.org Person
+│   ├── _headers                      # Seguridad y caché (Cloudflare)
 │   └── robots.txt
 ├── src/
 │   ├── assets/
@@ -114,7 +115,8 @@ tecnicopa-web/
 │   ├── pages/
 │   │   ├── index.astro              # Hub: las dos líneas al mismo nivel
 │   │   ├── soporte-tecnico.astro
-│   │   └── software.astro
+│   │   ├── software.astro
+│   │   └── 404.astro
 │   ├── styles/
 │   │   └── global.css
 │   └── utils/
@@ -124,6 +126,7 @@ tecnicopa-web/
 │       ├── seo.ts
 │       └── date.ts
 ├── astro.config.mjs
+├── wrangler.jsonc                   # Cloudflare Workers (static assets)
 ├── tsconfig.json
 ├── eslint.config.js
 ├── vitest.config.ts
@@ -138,6 +141,7 @@ tecnicopa-web/
 | `/` | Hub: soporte y software al mismo nivel |
 | `/soporte-tecnico` | Servicios, precios y cobertura de soporte |
 | `/software` | Software a la medida, automatización y precios |
+| `404` | Página no encontrada (CTA al inicio) |
 
 ---
 
@@ -297,7 +301,9 @@ Lo desarrolla el fundador, de forma remota, para empresas en toda Colombia.
 ```bash
 npm run dev            # Servidor de desarrollo en localhost:4321
 npm run build          # Build de producción (verifica errores TypeScript y Astro)
-npm run preview        # Preview del build de producción
+npm run preview        # Preview del build de producción (Astro)
+npm run preview:cf     # build + wrangler dev (Cloudflare local)
+npm run deploy         # build + wrangler deploy
 npm run check          # Verificación de tipos Astro + TypeScript
 npm run lint           # Linting con ESLint
 npm run format         # Formateo con Prettier
@@ -309,8 +315,12 @@ npm run test:coverage  # Vitest + cobertura 100% en src/utils
 
 ## Deploy
 
-- **Hosting: migración de Vercel a Cloudflare pendiente.**
+- **Plataforma**: Cloudflare Workers (static assets)
+- **CI**: Workers Builds conectado a GitHub (`tecnicopa-dev/tecnicopa-web`)
+- **Flujo**: push a `main` → producción; otras ramas → URLs de preview
 - **Dominio**: tecnicopa.com (DNS en Cloudflare)
+- **Headers**: `public/_headers` (seguridad + caché `immutable` de `/_astro/*`)
+- **www**: redirección `www.tecnicopa.com` → `tecnicopa.com` con una regla de Cloudflare (no en `_redirects`)
 - **Variable de entorno**: no se requieren variables de entorno para el sitio base
 
 Antes de hacer push a `main`, verificar:

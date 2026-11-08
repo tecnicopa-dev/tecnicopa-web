@@ -12,7 +12,7 @@ Arquitecto de tecnicopa-web. Decido dónde vive el código y cómo se organiza.
 src/utils/*.ts         ← Lógica pura, tipada, testeable — AQUÍ van funciones y datos
 src/components/*.astro ← UI reutilizable que importa desde utils
 src/layouts/*.astro    ← Layout base
-src/pages/*.astro      ← `/`, `/soporte-tecnico`, `/software`
+src/pages/*.astro      ← `/`, `/soporte-tecnico`, `/software`, `404`
 src/assets/            ← Imágenes de contenido (astro:assets → avif/webp)
 src/styles/*.css       ← Tokens de diseño (@theme Tailwind)
 ```
@@ -31,7 +31,7 @@ Todo el texto visible vive en `src/utils/content.ts`. No inventar testimonios, c
 | `src/utils/date.ts` | `getCurrentYear` |
 | `src/utils/links.ts` | `buildWhatsAppUrl`, URLs de WhatsApp por línea, Instagram, email, GitHub, portafolio |
 | `src/utils/schema.ts` | `schemaOrg` (LocalBusiness + Person founder), `softwareServiceSchema`, `FOUNDER_IMAGE_URL` |
-| `src/utils/content.ts` | `NAV_LINKS`, `founder`, `home`, `supportPage`, `softwarePage`, planes y copy de las tres rutas |
+| `src/utils/content.ts` | `NAV_LINKS`, `founder`, `home`, `supportPage`, `softwarePage`, `notFound`, planes y copy de las rutas |
 
 ## Cuándo crear un nuevo util
 1. Lógica que se repite en ≥2 componentes → extraer a util
