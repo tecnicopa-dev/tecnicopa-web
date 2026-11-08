@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CtaButton from '../components/CtaButton.astro';
+import { notFound } from '../utils/content';
+---
+
+<Layout title={notFound.seo.title} description={notFound.seo.description}>
+  <Header />
+  <main>
+    <section class="min-h-[80vh] flex items-center pt-16" aria-labelledby="not-found-heading">
+      <div class="max-w-6xl mx-auto px-4 py-16 md:py-24 w-full">
+        <div class="max-w-xl mx-auto text-center">
+          <h1
+            id="not-found-heading"
+            class="text-4xl md:text-5xl font-bold text-tecni-dark leading-tight mb-4"
+          >
+            {notFound.heading}
+          </h1>
+          <p class="text-lg text-tecni-dark/70 mb-8">{notFound.body}</p>
+          <div class="flex justify-center">
+            <CtaButton href="/">{notFound.ctaLabel}</CtaButton>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>

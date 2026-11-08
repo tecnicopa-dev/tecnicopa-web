@@ -10,8 +10,6 @@ import interLatin400 from '@fontsource/inter/files/inter-latin-400-normal.woff2?
 import interLatin700 from '@fontsource/inter/files/inter-latin-700-normal.woff2?url';
 import SEO from '../components/SEO.astro';
 import { schemaOrg, softwareServiceSchema } from '../utils/schema';
-import Analytics from '@vercel/analytics/astro';
-import SpeedInsights from '@vercel/speed-insights/astro';
 
 interface Props {
   title: string;
@@ -106,8 +104,5 @@ const {
         });
       });
     </script>
-
-    <SpeedInsights />
-    <Analytics />
   </body>
 </html>

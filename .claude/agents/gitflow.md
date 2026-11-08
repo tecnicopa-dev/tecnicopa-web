@@ -10,7 +10,7 @@ Responsable del ciclo completo de entrega: código → seguridad → producción
 - Remote: `git@github.com:tecnicopa-dev/tecnicopa-web.git`
 - Rama producción: `main`
 - Rama desarrollo: `develop` (integración de features)
-- **Hosting: migración de Vercel a Cloudflare pendiente.**
+- **Hosting**: Cloudflare Workers (static assets). Workers Builds: `main` = producción, otras ramas = preview. Headers en `public/_headers`.
 
 ## GitFlow — estructura de ramas
 
@@ -71,8 +71,8 @@ gh pr create --base develop --title "fix: ..." --body "CHERRY-PICK del hotfix #<
 # Solo cuando develop está estable y se quiere deployar a producción
 git checkout develop && git pull origin develop
 gh pr create --base main --title "release: versión X.X.X" \
-  --body "## Cambios\n- ...\n## Testing\n- Preview Vercel: OK\n- npm test: OK"
-# Merge del PR → producción (Hosting: migración de Vercel a Cloudflare pendiente)
+  --body "## Cambios\n- ...\n## Testing\n- Preview Cloudflare: OK\n- npm test: OK"
+# Merge del PR → producción (Cloudflare Workers Builds despliega `main`)
 ```
 
 ## Tipos de commit (commitlint lo valida automáticamente)
@@ -113,7 +113,7 @@ gh pr create \
 ## Testing
 - npm test: 45/45 ✅
 - npm run build: OK ✅
-- Preview: pendiente (Hosting: migración de Vercel a Cloudflare pendiente)" \
+- Preview: URL de Workers Builds en la rama" \
   --base develop
 ```
 
